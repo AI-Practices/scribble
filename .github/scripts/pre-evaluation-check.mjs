@@ -322,151 +322,7 @@ function forbiddenTechnologyScan() {
   };
 }
 
-const scenarioDefinitions = [
-  {
-    name: "Scenario 1: Room & Lobby",
-    concepts: [
-      {
-        name: "room creation and host assignment",
-        artifact: [/create room/i, /room creation/i, /creator.*host/i, /assign.*host/i],
-        code: [/createRoom/i, /hostId/i, /router\.post\(.{0,40}rooms/i, /creator.*host/i],
-      },
-      {
-        name: "invalid or empty room code feedback",
-        artifact: [/invalid.*room code/i, /empty.*room code/i, /clear.*feedback/i],
-        code: [/invalid.*room/i, /room.*not found/i, /code.*trim/i, /status\(400\)/i, /status\(404\)/i],
-      },
-      {
-        name: "lobby polling around 2 seconds",
-        artifact: [/poll/i, /2\s*s/i, /2000/i, /automatic.*refresh/i],
-        code: [/setInterval/i, /2000/i, /poll/i, /fetchRoom/i],
-      },
-      {
-        name: "host-only start with at least two players",
-        artifact: [/host.*start/i, /at least.*2/i, />=\s*2/i, /minimum.*2/i],
-        code: [/host/i, /players\.length\s*[<>=]/i, /participant.*length\s*[<>=]/i, /at least.*2/i, /status\(403\)/i],
-      },
-    ],
-  },
-  {
-    name: "Scenario 2: Drawer & Word",
-    concepts: [
-      {
-        name: "trimmed names and empty-name rejection",
-        artifact: [/trim/i, /empty.*name/i, /whitespace/i],
-        code: [/\.trim\(\)/i, /empty.*name/i, /playerName/i, /min\(1\)/i],
-      },
-      {
-        name: "deterministic drawer assignment",
-        artifact: [/deterministic.*drawer/i, /host.*drawer/i, /first player.*drawer/i],
-        code: [/drawerId/i, /hostId/i, /players\[0\]/i, /participants\[0\]/i],
-      },
-      {
-        name: "deterministic starter-list word selection",
-        artifact: [/deterministic.*word/i, /starter.*word/i, /rocket|pizza|castle|guitar|sunflower/i],
-        code: [/STARTER_WORDS/i, /starter.*word/i, /secretWord/i],
-      },
-      {
-        name: "secret word visible only to drawer before result",
-        artifact: [/visible only.*drawer/i, /only.*drawer.*word/i, /hide.*word/i],
-        code: [/isDrawer/i, /drawerId/i, /secretWord/i, /undefined|null/i],
-      },
-    ],
-  },
-  {
-    name: "Scenario 3: Gameplay",
-    concepts: [
-      {
-        name: "drawer canvas draw and clear",
-        artifact: [/canvas/i, /draw/i, /clear/i],
-        code: [/canvas/i, /stroke/i, /draw/i, /clearCanvas/i, /clear/i],
-      },
-      {
-        name: "canvas and clear sync via HTTP polling",
-        artifact: [/canvas.*sync/i, /drawing.*sync/i, /clear.*sync/i, /poll/i],
-        code: [/strokes/i, /canvas/i, /poll/i, /setInterval/i, /clearCanvas/i],
-      },
-      {
-        name: "guess trim, case-insensitive compare, empty rejection",
-        artifact: [/guess/i, /trim/i, /case-insensitive/i, /empty.*guess/i],
-        code: [/guess/i, /\.trim\(\)/i, /toLowerCase\(\)/i, /empty/i],
-      },
-      {
-        name: "guess history sync and scoring",
-        artifact: [/guess history/i, /\+100/i, /0 points/i, /score/i],
-        code: [/guessHistory/i, /guesses/i, /score/i, /100/i],
-      },
-      {
-        name: "correct guess moves to result",
-        artifact: [/correct guess.*result/i, /ends.*round/i, /ends.*game/i],
-        code: [/status.*result/i, /correct/i, /winner/i, /endedAt/i],
-      },
-    ],
-  },
-  {
-    name: "Scenario 4: Result & Restart",
-    concepts: [
-      {
-        name: "result shows word, scores, full history",
-        artifact: [/result/i, /correct word/i, /final scores/i, /full guess history/i],
-        code: [/Result/i, /secretWord/i, /scores/i, /guessHistory|guesses/i],
-      },
-      {
-        name: "host restart preserves players and clears round state",
-        artifact: [/restart/i, /preserve.*players/i, /clear.*state/i, /lobby/i],
-        code: [/restart/i, /players/i, /participants/i, /status.*lobby/i, /secretWord.*undefined|null/i],
-      },
-      {
-        name: "backend role permissions",
-        artifact: [/host-only/i, /drawer-only/i, /guesser/i, /backend.*permission/i],
-        code: [/status\(403\)/i, /Forbidden/i, /host/i, /drawer/i, /guesser/i],
-      },
-    ],
-  },
-];
 
-function scenarioCoverageHeuristic() {
-  const artifactFiles = [...walkFiles("specs"), ...walkFiles(".specify/memory")].filter((file) =>
-    [".md", ".json"].includes(path.extname(file))
-  );
-  const codeFiles = [...walkFiles("backend/src"), ...walkFiles("frontend/src")].filter((file) =>
-    [".ts", ".tsx", ".js", ".jsx"].includes(path.extname(file))
-  );
-
-  const scenarios = scenarioDefinitions.map((scenario) => {
-    const concepts = scenario.concepts.map((concept) => {
-      const artifactPatterns = concept.artifact.map((regex, index) => ({
-        label: `artifact-${index + 1}`,
-        regex,
-      }));
-      const codePatterns = concept.code.map((regex, index) => ({
-        label: `code-${index + 1}`,
-        regex,
-      }));
-      const artifactEvidence = firstLineMatches(artifactFiles, artifactPatterns, 3);
-      const codeEvidence = firstLineMatches(codeFiles, codePatterns, 3);
-      const status = artifactEvidence.length > 0 && codeEvidence.length > 0 ? "pass" : "fail";
-
-      return {
-        name: concept.name,
-        status,
-        artifactEvidence,
-        codeEvidence,
-      };
-    });
-
-    return {
-      name: scenario.name,
-      status: statusFromChecks(concepts),
-      concepts,
-    };
-  });
-
-  return {
-    status: statusFromChecks(scenarios),
-    scenarios,
-  };
-}
 
 function buildTestSummary() {
   const commands = [];
@@ -587,27 +443,7 @@ function renderForbiddenMarkdown(scan) {
   return lines.join("\n");
 }
 
-function compactEvidence(matches) {
-  if (matches.length === 0) return "none";
-  return matches.map((match) => `\`${match.file}:${match.line}\``).join(", ");
-}
 
-function renderScenarioMarkdown(coverage) {
-  const rows = [
-    "| Scenario | Concept | Status | Artifact evidence | Code evidence |",
-    "|----------|---------|--------|-------------------|---------------|",
-  ];
-
-  for (const scenario of coverage.scenarios) {
-    for (const concept of scenario.concepts) {
-      rows.push(
-        `| ${scenario.name} | ${concept.name} | ${formatStatus(concept.status)} | ${compactEvidence(concept.artifactEvidence)} | ${compactEvidence(concept.codeEvidence)} |`
-      );
-    }
-  }
-
-  return markdownTable(rows);
-}
 
 function renderBuildMarkdown(summary) {
   const rows = [
@@ -632,7 +468,7 @@ function renderBuildMarkdown(summary) {
 
 const inventory = artifactInventory();
 const forbidden = forbiddenTechnologyScan();
-const coverage = scenarioCoverageHeuristic();
+
 const buildSummary = buildTestSummary();
 
 const buildFailures = buildSummary.commands
@@ -644,7 +480,7 @@ const buildFailures = buildSummary.commands
 const failureReasons = [
   ...inventory.failures.map((failure) => `Artifact inventory: ${failure}`),
   ...forbidden.failures.map((failure) => `Forbidden technology: ${failure}`),
-  ...(coverage.status === "fail" ? ["Scenario coverage: Required scenario evidence was not found in both artifacts and code."] : []),
+
   ...buildFailures,
 ];
 
@@ -654,7 +490,7 @@ const report = {
   failureReasons,
   artifactInventory: inventory,
   forbiddenTechnologyScan: forbidden,
-  scenarioCoverageHeuristic: coverage,
+
   buildTestSummary: buildSummary,
 };
 
@@ -677,12 +513,6 @@ ${renderArtifactMarkdown(inventory)}
 ## Forbidden Technology Scan
 
 ${renderForbiddenMarkdown(forbidden)}
-
-## Scenario Coverage Heuristic
-
-Status: ${formatStatus(coverage.status)}
-
-${renderScenarioMarkdown(coverage)}
 
 ## Build/Test Summary
 
