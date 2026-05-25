@@ -5,4 +5,6 @@
 ## Contributor
 
 - Email:
-- Role: <!-- Developer / BA / Designer / Other -->
+- Role:
+  - [ ] Developer
+  - [ ] Product
