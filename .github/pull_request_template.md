@@ -6,5 +6,5 @@
 
 - Email:
 - Role:
-  - [ ] Developer
   - [ ] Product
+  - [ ] Developer
