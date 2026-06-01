@@ -87,8 +87,8 @@
 
 ### Implementation for User Story 3
 
-- [ ] T016 [US3] Verify `frontend/src/pages/LobbyPage.tsx` redirects to GamePage when a game is active (gameStartedAt is set and status is not lobby) — ensure reconnecting players navigate to the correct page
-- [ ] T017 [US3] Verify `frontend/src/pages/GamePage.tsx` correctly renders round_end state on reconnect — on mount, the round poll returns round_end data with resultExpiresAt, secretWord, scores, guesses; no additional wiring needed beyond US1
+- [x] T016 [US3] Verify `frontend/src/pages/LobbyPage.tsx` redirects to GamePage when a game is active (gameStartedAt is set and status is not lobby) — ensure reconnecting players navigate to the correct page
+- [x] T017 [US3] Verify `frontend/src/pages/GamePage.tsx` correctly renders round_end state on reconnect — on mount, the round poll returns round_end data with resultExpiresAt, secretWord, scores, guesses; no additional wiring needed beyond US1
 
 **Checkpoint**: Reconnecting players see the correct result state.
 
