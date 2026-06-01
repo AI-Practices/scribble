@@ -111,10 +111,10 @@ description: "Task list for Room Setup & Lobby feature"
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T023 Add room cleanup for inactive rooms (e.g., no participants, stale >30min) in `backend/src/services/roomStore.ts`
-- [ ] T024 [P] Verify `npm run build` passes in both `backend/` and `frontend/`
-- [ ] T025 [P] Run quickstart.md verification steps end-to-end
-- [ ] T026 Verify WCAG 2.1 AA color contrast for connection indicator and error states
+- [X] T023 Add room cleanup for inactive rooms (e.g., no participants, stale >30min) in `backend/src/services/roomStore.ts`
+- [X] T024 [P] Verify `npm run build` passes in both `backend/` and `frontend/`
+- [X] T025 [P] Run quickstart.md verification steps end-to-end
+- [X] T026 Verify WCAG 2.1 AA color contrast for connection indicator and error states
 
 ---
 

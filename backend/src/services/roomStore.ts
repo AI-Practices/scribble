@@ -106,6 +106,19 @@ export function saveRoom(room: Room) {
   return getRoom(room.code);
 }
 
+const STALE_MS = 30 * 60 * 1000;
+
+export function cleanupStaleRooms() {
+  const cutoff = Date.now() - STALE_MS;
+  const cutoffISO = new Date(cutoff).toISOString();
+
+  for (const [code, room] of rooms) {
+    if (room.participants.length === 0 || room.updatedAt < cutoffISO) {
+      rooms.delete(code);
+    }
+  }
+}
+
 export function toRoomSnapshot(room: Room, viewerParticipantId?: string): RoomSnapshot {
   void viewerParticipantId;
 
