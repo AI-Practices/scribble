@@ -32,8 +32,8 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T001 [P] Add `Game`, `Round`, `GameStatus` types to `backend/src/models/game.ts` (Game: roomCode, status, round, roundNumber, createdAt; Round: number, drawerId, secretWord, startedAt, endsAt; GameStatus: "playing" | "round_end")
-- [ ] T002 [P] Create `backend/src/services/gameStore.ts` with in-memory `Map<string, Game>`, `createGame()`, `getGame()` — `createGame()` validates roomCode exists, assigns host as drawer, selects word deterministically from STARTER_WORDS; `getGame()` returns game or null
+- [X] T001 [P] Add `Game`, `Round`, `GameStatus` types to `backend/src/models/game.ts` (Game: roomCode, status, round, roundNumber, createdAt; Round: number, drawerId, secretWord, startedAt, endsAt; GameStatus: "playing" | "round_end")
+- [X] T002 [P] Create `backend/src/services/gameStore.ts` with in-memory `Map<string, Game>`, `createGame()`, `getGame()` — `createGame()` validates roomCode exists, assigns host as drawer, selects word deterministically from STARTER_WORDS; `getGame()` returns game or null
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 

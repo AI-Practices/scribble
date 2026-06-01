@@ -1,5 +1,6 @@
 export type ParticipantRole = "drawer" | "guesser";
 export type RoomStatus = "lobby";
+export type GameStatus = "playing" | "round_end";
 
 export interface Participant {
   id: string;
@@ -28,4 +29,20 @@ export interface RoomSnapshot {
 export interface RoomSessionResponse {
   participantId: string;
   room: RoomSnapshot;
+}
+
+export interface Round {
+  number: number;
+  drawerId: string;
+  secretWord: string;
+  startedAt: string;
+  endsAt: string;
+}
+
+export interface Game {
+  roomCode: string;
+  status: GameStatus;
+  round: Round | null;
+  roundNumber: number;
+  createdAt: string;
 }
