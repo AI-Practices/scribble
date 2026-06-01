@@ -12,7 +12,7 @@ export function createGamesRouter() {
       const { code } = roomCodeParamsSchema.parse(request.params);
       const { participantId } = gameQuerySchema.parse(request.query);
 
-      const game = getGame(code.toUpperCase());
+      const game = getGame(code.toUpperCase(), participantId);
 
       if (!game || !game.round) {
         throw new HttpError(404, "No active game for this room");

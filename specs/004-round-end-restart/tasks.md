@@ -24,9 +24,9 @@
 
 **Purpose**: Type and schema additions needed by all stories
 
-- [ ] T001 [P] Add `resultExpiresAt` field to Game interface in `backend/src/models/game.ts`
-- [ ] T002 [P] Add restart payload Zod schema (participantId) to `backend/src/api/schemas.ts`
-- [ ] T003 [P] Add `resultExpiresAt` to RoundState interface in `frontend/src/state/roomStore.ts`
+- [x] T001 [P] Add `resultExpiresAt` field to Game interface in `backend/src/models/game.ts`
+- [x] T002 [P] Add restart payload Zod schema (participantId) to `backend/src/api/schemas.ts`
+- [x] T003 [P] Add `resultExpiresAt` to RoundState interface in `frontend/src/state/roomStore.ts`
 
 ---
 
@@ -36,9 +36,9 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Extend `endRound()` in `backend/src/services/gameStore.ts` to set `resultExpiresAt = now + 60s` on the game when transitioning to round_end
-- [ ] T005 Implement 60s result state timeout check in `backend/src/services/gameStore.ts` — when any poll detects `resultExpiresAt` has passed, auto-transition to lobby (clear game round data, clear Room gameStartedAt/drawerId/drawerName)
-- [ ] T006 Implement host disconnect auto-return (15-30s grace) in `backend/src/services/gameStore.ts` — track last poll time for host during round_end; if host hasn't polled for 15-30s, auto-transition to lobby (same logic as T005)
+- [x] T004 Extend `endRound()` in `backend/src/services/gameStore.ts` to set `resultExpiresAt = now + 60s` on the game when transitioning to round_end
+- [x] T005 Implement 60s result state timeout check in `backend/src/services/gameStore.ts` — when any poll detects `resultExpiresAt` has passed, auto-transition to lobby (clear game round data, clear Room gameStartedAt/drawerId/drawerName)
+- [x] T006 Implement host disconnect auto-return (15-30s grace) in `backend/src/services/gameStore.ts` — track last poll time for host during round_end; if host hasn't polled for 15-30s, auto-transition to lobby (same logic as T005)
 
 **Checkpoint**: Foundation ready — round_end state has a 60s expiry, host disconnect auto-returns to lobby after grace period.
 

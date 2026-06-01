@@ -84,4 +84,5 @@ export interface Game {
   scores: PlayerScore[];
   correctGuessers: string[];
   canvasState: CanvasState | null;
+  resultExpiresAt?: string;
 }

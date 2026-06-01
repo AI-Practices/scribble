@@ -27,6 +27,7 @@ export interface RoundState {
   status: "playing" | "round_end";
   secretWord?: string;
   endedAt?: string;
+  resultExpiresAt?: string;
   guesses: Guess[];
   scores: PlayerScore[];
   canvas: CanvasState | null;

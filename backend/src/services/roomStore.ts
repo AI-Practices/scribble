@@ -133,6 +133,20 @@ export function markGameStarted(code: string, drawerId?: string, drawerName?: st
   rooms.set(room.code, room);
 }
 
+export function clearGameStarted(code: string) {
+  const room = rooms.get(code);
+
+  if (!room) {
+    return;
+  }
+
+  delete room.gameStartedAt;
+  delete room.drawerId;
+  delete room.drawerName;
+  room.updatedAt = now();
+  rooms.set(room.code, room);
+}
+
 export function toRoomSnapshot(room: Room, viewerParticipantId?: string): RoomSnapshot {
   void viewerParticipantId;
 

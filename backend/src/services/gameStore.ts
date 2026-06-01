@@ -1,11 +1,12 @@
 import { type Game, type Round, type Guess, type PlayerScore, type CanvasState } from "../models/game.js";
-import { getRoom } from "./roomStore.js";
+import { getRoom, clearGameStarted } from "./roomStore.js";
 import { STARTER_WORDS } from "../seed/starterData.js";
 import { HttpError } from "../api/schemas.js";
 import { initCanvasState } from "./canvasStore.js";
 
 const games = new Map<string, Game>();
 const roundTimers = new Map<string, ReturnType<typeof setTimeout>>();
+const hostLastPollAt = new Map<string, number>();
 
 function now() {
   return new Date().toISOString();
@@ -104,13 +105,55 @@ export function endRound(roomCode: string) {
     game.round.endedAt = now();
   }
 
+  game.resultExpiresAt = new Date(Date.now() + 60_000).toISOString();
+
   games.set(roomCode, game);
   roundTimers.delete(roomCode);
 }
 
-export function getGame(roomCode: string): Game | null {
+function resetGameData(roomCode: string) {
+  if (!games.has(roomCode)) {
+    return;
+  }
+
+  games.delete(roomCode);
+  clearGameStarted(roomCode);
+  hostLastPollAt.delete(roomCode);
+}
+
+export function getGame(roomCode: string, callerParticipantId?: string): Game | null {
   const game = games.get(roomCode);
-  return game ? structuredClone(game) : null;
+
+  if (!game) {
+    return null;
+  }
+
+  if (game.status === "round_end") {
+    if (game.resultExpiresAt && Date.now() > Date.parse(game.resultExpiresAt)) {
+      resetGameData(roomCode);
+      return null;
+    }
+
+    if (callerParticipantId) {
+      const room = getRoom(roomCode);
+      const hostId = room?.hostId;
+
+      if (hostId && callerParticipantId === hostId) {
+        hostLastPollAt.set(roomCode, Date.now());
+      }
+
+      if (hostId && callerParticipantId !== hostId) {
+        const hostLastPoll = hostLastPollAt.get(roomCode);
+        if (hostLastPoll && Date.now() - hostLastPoll > 25_000) {
+          resetGameData(roomCode);
+          hostLastPollAt.delete(roomCode);
+          return null;
+        }
+      }
+    }
+  }
+
+  return structuredClone(game);
 }
 
 function generateGuessId(): string {

@@ -74,6 +74,7 @@ export interface RoundResponse {
     startedAt: string;
     endsAt: string;
     endedAt?: string;
+    resultExpiresAt?: string;
     guesses: Guess[];
     scores: PlayerScore[];
     canvas: CanvasState | null;
