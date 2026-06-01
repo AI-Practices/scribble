@@ -20,6 +20,32 @@ export interface RoomSessionResponse {
   room: RoomSnapshot;
 }
 
+export interface GameStartResponse {
+  game: {
+    roomCode: string;
+    status: "playing" | "round_end";
+    roundNumber: number;
+    drawerId: string;
+    drawerName: string;
+    startedAt: string;
+    endsAt: string;
+  };
+}
+
+export interface RoundResponse {
+  round: {
+    number: number;
+    status: "playing" | "round_end";
+    drawerId: string;
+    drawerName: string;
+    amDrawer: boolean;
+    secretWord?: string;
+    startedAt: string;
+    endsAt: string;
+    endedAt?: string;
+  };
+}
+
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3001";
 
 async function request<T>(path: string, init?: RequestInit) {
@@ -58,5 +84,16 @@ export const api = {
   fetchRoom(code: string, participantId?: string) {
     const query = participantId ? `?participantId=${encodeURIComponent(participantId)}` : "";
     return request<{ room: RoomSnapshot }>(`/rooms/${encodeURIComponent(code)}${query}`);
+  },
+  startGame(code: string, participantId: string) {
+    return request<GameStartResponse>(`/rooms/${encodeURIComponent(code)}/start`, {
+      method: "POST",
+      body: JSON.stringify({ participantId })
+    });
+  },
+  fetchRound(code: string, participantId: string) {
+    return request<RoundResponse>(
+      `/games/${encodeURIComponent(code)}/round?participantId=${encodeURIComponent(participantId)}`
+    );
   }
 };

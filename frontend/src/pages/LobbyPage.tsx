@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "../components/Card";
 import { PageHeader } from "../components/PageHeader";
 import { RoomCodeBadge } from "../components/RoomCodeBadge";
 import { useRoomState, useRoomStore } from "../state/roomStore";
+import { api } from "../services/api";
 
 export function LobbyPage() {
   const navigate = useNavigate();
@@ -30,6 +31,20 @@ export function LobbyPage() {
       // error is tracked via connectionIssue in the store
     }
   }
+
+  const handleStartGame = useCallback(async () => {
+    if (!room || !participantId) {
+      return;
+    }
+
+    try {
+      const response = await api.startGame(room.code, participantId);
+      roomStore.setGameStartResponse(response);
+      navigate("/game");
+    } catch {
+      roomStore.fetchRoom();
+    }
+  }, [room, participantId, navigate, roomStore]);
 
   if (!room) {
     return null;
@@ -83,7 +98,7 @@ export function LobbyPage() {
           <button
             className="button button--primary"
             disabled={room.participants.length < 2}
-            onClick={() => navigate("/game")}
+            onClick={handleStartGame}
           >
             {room.participants.length < 2 ? "Waiting for players..." : "Start Game"}
           </button>

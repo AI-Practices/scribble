@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { Router } from "express";
 import { createRoomsRouter } from "./rooms.js";
+import { createGamesRouter } from "./games.js";
 
 export function createApiRouter() {
   const router = Router();
@@ -13,6 +14,7 @@ export function createApiRouter() {
   });
 
   router.use("/rooms", createRoomsRouter());
+  router.use("/games", createGamesRouter());
 
   return router;
 }

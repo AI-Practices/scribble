@@ -4,9 +4,11 @@ import {
   HttpError,
   joinRoomSchema,
   roomCodeParamsSchema,
-  roomViewerQuerySchema
+  roomViewerQuerySchema,
+  startGamePayloadSchema
 } from "./schemas.js";
 import { createRoom, getRoom, joinRoom, toRoomSnapshot } from "../services/roomStore.js";
+import { createGame } from "../services/gameStore.js";
 
 export function createRoomsRouter() {
   const router = Router();
@@ -52,6 +54,42 @@ export function createRoomsRouter() {
 
       response.json({
         room: toRoomSnapshot(room, participantId)
+      });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.post("/:code/start", (request, response, next) => {
+    try {
+      const { code } = roomCodeParamsSchema.parse(request.params);
+      const { participantId } = startGamePayloadSchema.parse(request.body);
+      const room = getRoom(code.toUpperCase());
+
+      if (!room) {
+        throw new HttpError(404, "Room not found");
+      }
+
+      if (room.hostId !== participantId) {
+        throw new HttpError(400, "Only the host can start the game");
+      }
+
+      const game = createGame(code.toUpperCase());
+
+      const drawerName = room.participants.find(
+        (p) => p.id === game.round!.drawerId
+      )!.name;
+
+      response.json({
+        game: {
+          roomCode: game.roomCode,
+          status: game.status,
+          roundNumber: game.roundNumber,
+          drawerId: game.round!.drawerId,
+          drawerName,
+          startedAt: game.round!.startedAt,
+          endsAt: game.round!.endsAt
+        }
       });
     } catch (error) {
       next(error);

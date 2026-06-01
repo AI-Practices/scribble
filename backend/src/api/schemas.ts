@@ -16,6 +16,14 @@ export const roomViewerQuerySchema = z.object({
   participantId: z.string().optional()
 });
 
+export const startGamePayloadSchema = z.object({
+  participantId: z.string().min(1, "participantId is required")
+});
+
+export const gameQuerySchema = z.object({
+  participantId: z.string().min(1, "participantId is required")
+});
+
 export class HttpError extends Error {
   statusCode: number;
 

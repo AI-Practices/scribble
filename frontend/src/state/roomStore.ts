@@ -7,7 +7,17 @@ import {
   useSyncExternalStore,
   type PropsWithChildren
 } from "react";
-import { api, type RoomSessionResponse, type RoomSnapshot } from "../services/api";
+import { api, type RoomSessionResponse, type RoomSnapshot, type GameStartResponse } from "../services/api";
+
+export interface RoundState {
+  number: number;
+  drawerId: string;
+  drawerName: string;
+  startedAt: string;
+  endsAt: string;
+  amDrawer: boolean;
+  status: "playing" | "round_end";
+}
 
 export interface RoomState {
   room: RoomSnapshot | null;
@@ -16,6 +26,8 @@ export interface RoomState {
   error: string | null;
   isLoading: boolean;
   connectionIssue: boolean;
+  round: RoundState | null;
+  gameStatus: string | null;
 }
 
 type Listener = () => void;
@@ -27,11 +39,14 @@ class RoomStore {
     isHost: false,
     error: null,
     isLoading: false,
-    connectionIssue: false
+    connectionIssue: false,
+    round: null,
+    gameStatus: null
   };
 
   private listeners = new Set<Listener>();
   private _pollIntervalId: ReturnType<typeof setInterval> | null = null;
+  private _roundPollIntervalId: ReturnType<typeof setInterval> | null = null;
   private _consecutivePollFailures = 0;
 
   subscribe = (listener: Listener) => {
@@ -97,6 +112,42 @@ class RoomStore {
     return response;
   }
 
+  setGameStartResponse(response: GameStartResponse) {
+    const drawerId = response.game.drawerId;
+    this.setState({
+      gameStatus: response.game.status,
+      round: {
+        number: response.game.roundNumber,
+        drawerId,
+        drawerName: response.game.drawerName,
+        startedAt: response.game.startedAt,
+        endsAt: response.game.endsAt,
+        amDrawer: drawerId === this.state.participantId,
+        status: "playing"
+      }
+    });
+  }
+
+  setRoundState(round: RoundState) {
+    this.setState({ round });
+  }
+
+  async fetchRound() {
+    if (!this.state.room || !this.state.participantId) {
+      return;
+    }
+
+    try {
+      const response = await api.fetchRound(
+        this.state.room.code,
+        this.state.participantId
+      );
+      this.setRoundState(response.round);
+    } catch {
+      // round polling failure handled gracefully
+    }
+  }
+
   async fetchRoom() {
     if (!this.state.room) {
       return null;
@@ -135,6 +186,21 @@ class RoomStore {
     if (this._pollIntervalId !== null) {
       clearInterval(this._pollIntervalId);
       this._pollIntervalId = null;
+    }
+  }
+
+  startRoundPolling(intervalMs: number) {
+    this.stopRoundPolling();
+
+    this._roundPollIntervalId = setInterval(() => {
+      this.fetchRound();
+    }, intervalMs);
+  }
+
+  stopRoundPolling() {
+    if (this._roundPollIntervalId !== null) {
+      clearInterval(this._roundPollIntervalId);
+      this._roundPollIntervalId = null;
     }
   }
 }

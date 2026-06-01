@@ -47,13 +47,13 @@
 
 ### Implementation for User Story 1
 
-- [ ] T003 [P] [US1] Add start-game Zod schema `StartGamePayload` (participantId: string) and error response types to `backend/src/api/schemas.ts`
-- [ ] T004 [P] [US1] Implement `POST /api/rooms/:code/start` endpoint in `backend/src/api/rooms.ts` — validates host, ≥2 players, creates game via gameStore, returns game snapshot without secret word
-- [ ] T005 [P] [US1] Mount games router in `backend/src/app.ts`
-- [ ] T006 [P] [US1] Add `startGame(code: string, participantId: string)` to `frontend/src/services/api.ts`
-- [ ] T007 [US1] Update `frontend/src/pages/LobbyPage.tsx` — wire "Start Game" button to POST `/api/rooms/:code/start` API call instead of client-side-only navigation; navigate to `/game` on success; show error on failure
-- [ ] T008 [US1] Update `frontend/src/pages/GamePage.tsx` — display drawer identity (show "You are the drawer!" for drawer, "[Name] is drawing..." for others); poll for round state from mount
-- [ ] T009 [US1] Add drawer label styles to `frontend/src/styles/app.css` (drawer badge, "You are drawing" highlight, non-drawer "waiting" state)
+- [X] T003 [P] [US1] Add start-game Zod schema `StartGamePayload` (participantId: string) and error response types to `backend/src/api/schemas.ts`
+- [X] T004 [P] [US1] Implement `POST /api/rooms/:code/start` endpoint in `backend/src/api/rooms.ts` — validates host, ≥2 players, creates game via gameStore, returns game snapshot without secret word
+- [X] T005 [P] [US1] Mount games router in `backend/src/app.ts`
+- [X] T006 [P] [US1] Add `startGame(code: string, participantId: string)` to `frontend/src/services/api.ts`
+- [X] T007 [US1] Update `frontend/src/pages/LobbyPage.tsx` — wire "Start Game" button to POST `/api/rooms/:code/start` API call instead of client-side-only navigation; navigate to `/game` on success; show error on failure
+- [X] T008 [US1] Update `frontend/src/pages/GamePage.tsx` — display drawer identity (show "You are the drawer!" for drawer, "[Name] is drawing..." for others); poll for round state from mount
+- [X] T009 [US1] Add drawer label styles to `frontend/src/styles/app.css` (drawer badge, "You are drawing" highlight, non-drawer "waiting" state)
 
 **Checkpoint**: At this point, User Story 1 should be fully functional — host can start game, all players see drawer identity
 
