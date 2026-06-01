@@ -7,7 +7,7 @@ import {
   roomViewerQuerySchema,
   startGamePayloadSchema
 } from "./schemas.js";
-import { createRoom, getRoom, joinRoom, toRoomSnapshot } from "../services/roomStore.js";
+import { createRoom, getRoom, joinRoom, markGameStarted, toRoomSnapshot } from "../services/roomStore.js";
 import { createGame } from "../services/gameStore.js";
 
 export function createRoomsRouter() {
@@ -79,6 +79,8 @@ export function createRoomsRouter() {
       const drawerName = room.participants.find(
         (p) => p.id === game.round!.drawerId
       )!.name;
+
+      markGameStarted(code.toUpperCase(), game.round!.drawerId, drawerName);
 
       response.json({
         game: {

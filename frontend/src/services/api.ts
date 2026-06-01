@@ -13,6 +13,9 @@ export interface RoomSnapshot {
   participants: Participant[];
   availableWords: string[];
   roles: ParticipantRole[];
+  gameStartedAt?: string;
+  drawerId?: string;
+  drawerName?: string;
 }
 
 export interface RoomSessionResponse {

@@ -70,7 +70,7 @@ backend/
 │   ├── models/
 │   │   └── game.ts         # Add Game, Round interfaces, GameStatus type
 │   ├── services/
-│   │   ├── roomStore.ts    # Add createGame(), getGame(), toRoundSnapshot()
+│   │   ├── roomStore.ts    # Add markGameStarted(), getGame(), toRoundSnapshot()
 │   │   └── gameStore.ts    # New: Game store (Map<string, Game>)
 │   └── app.ts              # Mount games router
 
@@ -95,7 +95,7 @@ frontend/
 
 1. Add `Game`, `Round` interfaces and `GameStatus` type to `backend/src/models/game.ts`
 2. Create `backend/src/services/gameStore.ts` with in-memory `Map<string, Game>`, `createGame()`, `getGame()` methods
-3. Update `backend/src/api/rooms.ts` — add `POST /api/rooms/:code/start` (host-only, ≥2 players, state transition)
+3. Update `backend/src/api/rooms.ts` — add `POST /api/rooms/:code/start` (host-only, ≥2 players, state transition); calls `markGameStarted()` on `roomStore` to stamp `drawerId`/`drawerName`/`gameStartedAt` on the Room
 4. Create `backend/src/api/games.ts` — add `GET /api/games/:code/round` (polling, word filtered by drawer identity)
 5. Update Zod schemas in `backend/src/api/schemas.ts`
 6. Mount games router in `backend/src/app.ts`

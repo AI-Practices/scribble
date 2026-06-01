@@ -30,8 +30,8 @@ export function GamePage() {
   }
 
   const viewer = room.participants.find((participant) => participant.id === participantId) ?? null;
-  const amDrawer = round?.amDrawer ?? false;
-  const drawerName = round?.drawerName ?? "Unknown";
+  const amDrawer = round?.amDrawer ?? (participantId === room.drawerId);
+  const drawerName = round?.drawerName ?? room.drawerName ?? "Unknown";
 
   return (
     <section className="panel game-page">

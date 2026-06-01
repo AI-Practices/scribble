@@ -1,5 +1,58 @@
 # Room API: Game Start & Round Polling
 
+## GET /api/rooms/:code
+
+Fetch the current room snapshot.
+
+**Query Parameters:**
+
+| Param | Type | Required | Description |
+|-------|------|----------|-------------|
+| `participantId` | `string` | no | The caller's participant ID |
+
+**Response `200` (before game start):**
+
+```json
+{
+  "room": {
+    "code": "ABCD",
+    "status": "lobby",
+    "hostId": "uuid-of-host",
+    "participants": [ ... ],
+    "availableWords": [ ... ],
+    "roles": ["drawer", "guesser"]
+  }
+}
+```
+
+**Response `200` (after game start):**
+
+```json
+{
+  "room": {
+    "code": "ABCD",
+    "status": "lobby",
+    "hostId": "uuid-of-host",
+    "participants": [ ... ],
+    "availableWords": [ ... ],
+    "roles": ["drawer", "guesser"],
+    "gameStartedAt": "2026-06-01T12:00:00.000Z",
+    "drawerId": "uuid-of-host",
+    "drawerName": "HostName"
+  }
+}
+```
+
+| Field | Before game | After game |
+|-------|-------------|------------|
+| `room.gameStartedAt` | ❌ Absent | ✅ `string` (ISO 8601) |
+| `room.drawerId` | ❌ Absent | ✅ Participant ID of the drawer |
+| `room.drawerName` | ❌ Absent | ✅ Display name of the drawer |
+
+**Note:** These extended fields allow non-host players polling the lobby endpoint to detect game start and redirect to the game screen without waiting for the dedicated round endpoint.
+
+---
+
 ## POST /api/rooms/:code/start
 
 Start the game, transitioning the room from Lobby to Playing.

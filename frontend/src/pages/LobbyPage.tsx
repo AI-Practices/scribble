@@ -24,6 +24,12 @@ export function LobbyPage() {
     };
   }, [roomStore]);
 
+  useEffect(() => {
+    if (room?.gameStartedAt) {
+      navigate("/game");
+    }
+  }, [room?.gameStartedAt, navigate]);
+
   async function handleRefresh() {
     try {
       await roomStore.fetchRoom();

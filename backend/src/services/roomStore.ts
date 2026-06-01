@@ -119,6 +119,20 @@ export function cleanupStaleRooms() {
   }
 }
 
+export function markGameStarted(code: string, drawerId?: string, drawerName?: string) {
+  const room = rooms.get(code);
+
+  if (!room) {
+    return;
+  }
+
+  room.gameStartedAt = now();
+  room.drawerId = drawerId;
+  room.drawerName = drawerName;
+  room.updatedAt = now();
+  rooms.set(room.code, room);
+}
+
 export function toRoomSnapshot(room: Room, viewerParticipantId?: string): RoomSnapshot {
   void viewerParticipantId;
 
@@ -128,6 +142,9 @@ export function toRoomSnapshot(room: Room, viewerParticipantId?: string): RoomSn
     hostId: room.hostId,
     participants: room.participants.map((participant) => ({ ...participant })),
     availableWords: listWords(),
-    roles: [...STARTER_ROLES]
+    roles: [...STARTER_ROLES],
+    gameStartedAt: room.gameStartedAt,
+    drawerId: room.drawerId,
+    drawerName: room.drawerName
   };
 }

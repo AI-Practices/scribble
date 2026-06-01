@@ -55,6 +55,7 @@
 - **Decision**: Dedicated `GET /api/games/:code/round` endpoint polled at ~2s.
 - **Rationale**: Clarified in spec. Keeps round concerns separate from room/lobby concerns. Drawer identity returned to all players; secret word returned only to drawer. Drawer is identified by matching `participantId` query param.
 - **Alternatives considered**: Extending existing `GET /api/rooms/:code` response — rejected because the room endpoint should remain lightweight and focused on lobby state.
+- **Hybrid approach adopted**: The room endpoint is extended with `drawerId`/`drawerName`/`gameStartedAt` fields after game start as a bridge mechanism. This allows non-host players to detect the game start and identify the drawer immediately via their existing lobby polling loop, without waiting for the dedicated round endpoint to be implemented or polled.
 
 ### Round Timer
 - **Decision**: 60-second countdown. Timer starts on Playing state entry. Round ends automatically when timer expires.
@@ -74,6 +75,7 @@
 ### Drawer Identification
 - **Decision**: The `drawerId` field in the round response identifies the drawer. The frontend compares this against its stored `participantId` to determine if the current player is the drawer. Non-drawer players see the drawer's `name` in the response.
 - **Rationale**: The frontend already has `participantId` in RoomStore state. No additional auth tokens needed. Drawer identity is included for all players; the secret word is a separate field returned only when `participantId === drawerId`.
+- **Fallback for non-host players**: `drawerId` and `drawerName` are additionally stamped on the Room entity when the game starts, enabling non-host players to detect the transition and identify the drawer through the existing lobby polling mechanism before the dedicated round polling endpoint is available.
 
 ### Starter List
 - **Decision**: Reuse existing `STARTER_WORDS = ["rocket","pizza","castle","guitar","sunflower"]` from `starterData.ts`. Not user-configurable for v1.

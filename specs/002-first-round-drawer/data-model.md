@@ -60,6 +60,21 @@ secretWord = STARTER_WORDS[index]
 - **Lobby → Playing**: Atomic transition. Creates Game and Round 1 simultaneously. Assigns host as drawer. Selects word deterministically.
 - **Playing → Round End**: Triggered by timer expiry. Round is finalized; drawer and word remain as-set.
 
+## Room Extension on Game Start
+
+When a game starts (`POST /api/rooms/:code/start` succeeds), the existing Room entity is extended with the following fields to enable non-host players to detect the transition and identify the drawer via lobby polling:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `gameStartedAt` | `string` (ISO 8601) | Timestamp of when the game started |
+| `drawerId` | `string` | `Participant.id` of the designated drawer (the host) |
+| `drawerName` | `string` | Display name of the designated drawer |
+
+**Validation Rules:**
+- These fields are absent (`undefined`) when the Room is in Lobby state
+- Set atomically when the Game and Round are created
+- `drawerId` always matches `hostId` for the first round
+
 ## Relationships
 
 - A **Room** has zero or one **Game** (null when in Lobby state)
