@@ -52,6 +52,9 @@ description: "Task list template for feature implementation"
 - [ ] T001 Create project structure per implementation plan
 - [ ] T002 Initialize [language] project with [framework] dependencies
 - [ ] T003 [P] Configure linting and formatting tools
+- [ ] T004 Configure TypeScript strict mode (no `any`, `unknown` for dynamic types)
+- [ ] T005 [P] Set up Zod validation schemas for API payloads/responses
+- [ ] T006 [P] Implement RoomStore pattern for frontend state management
 
 ---
 

@@ -40,7 +40,12 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+1. **TypeScript Strictness Gate** — No `any` types; all new code fully typed.
+2. **Architecture Gate** — Backend layering (api/services/models), functional React, Zod validation, RoomStore state only.
+3. **HTTP-Only Sync Gate** — No WebSockets or real-time push protocols.
+4. **In-Memory Gate** — No databases, auth, or sessions.
+5. **Deterministic Logic Gate** — Game rules must be predictable and edge-case-handled.
+6. **Brownfield Gate** — No rewrites; inspect before changing.
 
 ## Project Structure
 
