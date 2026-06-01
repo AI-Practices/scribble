@@ -53,10 +53,10 @@ description: "Task list for Room Setup & Lobby feature"
 
 **Independent Test**: Open the app, enter a name, click "Create Room", land on lobby showing the room code and host badge
 
-- [ ] T007 [P] [US1] Update `POST /rooms` handler in `backend/src/api/rooms.ts` to validate `playerName` is non-empty after trim
-- [ ] T008 [P] [US1] Add `hostId` to Room snapshot returned by `createRoom` in `backend/src/services/roomStore.ts`
-- [ ] T009 [US1] Add client-side player name validation (trim, reject empty) on CreateRoomPage in `frontend/src/pages/CreateRoomPage.tsx`
-- [ ] T010 [US1] Add host badge indicator ("Host") next to the host's name in the lobby participant list in `frontend/src/pages/LobbyPage.tsx`
+- [X] T007 [P] [US1] Update `POST /rooms` handler in `backend/src/api/rooms.ts` to validate `playerName` is non-empty after trim
+- [X] T008 [P] [US1] Add `hostId` to Room snapshot returned by `createRoom` in `backend/src/services/roomStore.ts`
+- [X] T009 [US1] Add client-side player name validation (trim, reject empty) on CreateRoomPage in `frontend/src/pages/CreateRoomPage.tsx`
+- [X] T010 [US1] Add host badge indicator ("Host") next to the host's name in the lobby participant list in `frontend/src/pages/LobbyPage.tsx`
 
 **Checkpoint**: User Story 1 complete — player can create a room, see their code, and the host is tracked
 
