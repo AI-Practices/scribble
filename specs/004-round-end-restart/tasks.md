@@ -98,10 +98,10 @@
 
 **Purpose**: Final integration, edge case handling, and verification
 
-- [ ] T018 [P] Run `npm run build` in both `backend/` and `frontend/` — verify no TypeScript errors
-- [ ] T019 Run quickstart.md validation — manually verify all 7 verification steps pass
-- [ ] T020 [P] Handle edge case: restart button is NOT visible to non-host players
-- [ ] T021 Handle edge case: all players except host leave during result state — host can still restart
+- [x] T018 [P] Run `npm run build` in both `backend/` and `frontend/` — verify no TypeScript errors
+- [x] T019 Run quickstart.md validation — manually verify all 7 verification steps pass
+- [x] T020 [P] Handle edge case: restart button is NOT visible to non-host players
+- [x] T021 Handle edge case: all players except host leave during result state — host can still restart
 
 ---
 
