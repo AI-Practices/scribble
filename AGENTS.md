@@ -43,7 +43,7 @@ You are working on a monolithic repository for a multiplayer drawing game ("Scri
 
 <!-- SPECKIT START -->
 For additional context about the current feature, read the implementation plan:
-specs/001-room-setup-lobby/plan.md
+specs/002-first-round-drawer/plan.md
 
 Key design documents:
 - spec.md — feature specification and acceptance criteria
