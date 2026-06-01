@@ -24,11 +24,11 @@
 
 **Purpose**: Type definitions, schemas, and store wiring needed by all stories
 
-- [ ] T001 [P] Add Guess, PlayerScore, CanvasStroke, CanvasState types to `backend/src/models/game.ts`
-- [ ] T002 [P] Add guess submission Zod schema (participantId, content) to `backend/src/api/schemas.ts`
-- [ ] T003 [P] Add canvas sync Zod schema (strokes, cleared) to `backend/src/api/schemas.ts`
-- [ ] T004 [P] Extend `frontend/src/services/api.ts` with Guess, PlayerScore, CanvasState, CanvasStroke response types
-- [ ] T005 [P] Extend `frontend/src/state/roomStore.ts` RoundState interface with guesses, scores, canvas, guessedCorrectly fields
+- [x] T001 [P] Add Guess, PlayerScore, CanvasStroke, CanvasState types to `backend/src/models/game.ts`
+- [x] T002 [P] Add guess submission Zod schema (participantId, content) to `backend/src/api/schemas.ts`
+- [x] T003 [P] Add canvas sync Zod schema (strokes, cleared) to `backend/src/api/schemas.ts`
+- [x] T004 [P] Extend `frontend/src/services/api.ts` with Guess, PlayerScore, CanvasState, CanvasStroke response types
+- [x] T005 [P] Extend `frontend/src/state/roomStore.ts` RoundState interface with guesses, scores, canvas, guessedCorrectly fields
 
 ---
 
@@ -38,10 +38,10 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T006 Create `backend/src/services/canvasStore.ts` — in-memory Map for canvas state per round (strokes list, cleared flag, updatedAt)
-- [ ] T007 Extend `backend/src/services/gameStore.ts` with guess storage (guesses array per game), score tracking (scores map per game), correct guesser tracking (correctGuessers set per round)
-- [ ] T008 [P] Add submitGuess() function to `backend/src/services/gameStore.ts` — validates round active, trims content, rejects empty, case-insensitive compare, awards 100 points if correct, records guess, prevents duplicate correct guesses
-- [ ] T009 [P] Add canvasSync() function to `backend/src/services/canvasStore.ts` — appends strokes or clears canvas, validates caller is drawer
+- [x] T006 Create `backend/src/services/canvasStore.ts` — in-memory Map for canvas state per round (strokes list, cleared flag, updatedAt)
+- [x] T007 Extend `backend/src/services/gameStore.ts` with guess storage (guesses array per game), score tracking (scores map per game), correct guesser tracking (correctGuessers set per round)
+- [x] T008 [P] Add submitGuess() function to `backend/src/services/gameStore.ts` — validates round active, trims content, rejects empty, case-insensitive compare, awards 100 points if correct, records guess, prevents duplicate correct guesses
+- [x] T009 [P] Add canvasSync() function to `backend/src/services/canvasStore.ts` — appends strokes or clears canvas, validates caller is drawer
 
 **Checkpoint**: Foundation ready — user story implementation can now begin in parallel
 

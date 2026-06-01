@@ -24,6 +24,21 @@ export const gameQuerySchema = z.object({
   participantId: z.string().min(1, "participantId is required")
 });
 
+export const guessSubmissionSchema = z.object({
+  participantId: z.string().min(1, "participantId is required"),
+  content: z.string().min(1, "Guess cannot be empty").trim()
+});
+
+export const canvasSyncSchema = z.object({
+  participantId: z.string().min(1, "participantId is required"),
+  strokes: z.array(
+    z.object({
+      points: z.array(z.object({ x: z.number(), y: z.number() })).min(2)
+    })
+  ),
+  cleared: z.boolean()
+});
+
 export class HttpError extends Error {
   statusCode: number;
 

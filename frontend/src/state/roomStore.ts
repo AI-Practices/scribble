@@ -7,7 +7,15 @@ import {
   useSyncExternalStore,
   type PropsWithChildren
 } from "react";
-import { api, type RoomSessionResponse, type RoomSnapshot, type GameStartResponse } from "../services/api";
+import {
+  api,
+  type RoomSessionResponse,
+  type RoomSnapshot,
+  type GameStartResponse,
+  type Guess,
+  type PlayerScore,
+  type CanvasState
+} from "../services/api";
 
 export interface RoundState {
   number: number;
@@ -19,6 +27,10 @@ export interface RoundState {
   status: "playing" | "round_end";
   secretWord?: string;
   endedAt?: string;
+  guesses: Guess[];
+  scores: PlayerScore[];
+  canvas: CanvasState | null;
+  guessedCorrectly: boolean;
 }
 
 export interface RoomState {
@@ -125,7 +137,11 @@ class RoomStore {
         startedAt: response.game.startedAt,
         endsAt: response.game.endsAt,
         amDrawer: drawerId === this.state.participantId,
-        status: "playing"
+        status: "playing",
+        guesses: [],
+        scores: [],
+        canvas: null,
+        guessedCorrectly: false
       }
     });
   }

@@ -35,6 +35,34 @@ export interface GameStartResponse {
   };
 }
 
+export interface CanvasStroke {
+  id: string;
+  points: Array<{ x: number; y: number }>;
+  lineWidth: number;
+}
+
+export interface CanvasState {
+  strokes: CanvasStroke[];
+  cleared: boolean;
+  updatedAt: string;
+}
+
+export interface Guess {
+  id: string;
+  roundNumber: number;
+  participantId: string;
+  participantName: string;
+  content: string;
+  isCorrect: boolean;
+  submittedAt: string;
+}
+
+export interface PlayerScore {
+  participantId: string;
+  participantName: string;
+  score: number;
+}
+
 export interface RoundResponse {
   round: {
     number: number;
@@ -46,7 +74,18 @@ export interface RoundResponse {
     startedAt: string;
     endsAt: string;
     endedAt?: string;
+    guesses: Guess[];
+    scores: PlayerScore[];
+    canvas: CanvasState | null;
+    guessedCorrectly: boolean;
   };
+}
+
+export interface GuessResult {
+  result: "correct" | "incorrect";
+  guess: Guess;
+  scoreAwarded?: number;
+  totalScore?: number;
 }
 
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3001";
