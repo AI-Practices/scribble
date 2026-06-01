@@ -86,9 +86,9 @@
 
 ### Implementation for User Story 3
 
-- [ ] T016 [P] [US3] Implement deterministic word selection function in `backend/src/services/gameStore.ts` using `hash(roomCode + ":" + roundNumber) % STARTER_WORDS.length`
-- [ ] T017 [US3] Integrate word selection into round creation in `backend/src/services/gameStore.ts` — call word selection on round creation; store selected word in Round.secretWord
-- [ ] T018 [US3] Handle edge cases: empty starter list (minimum 1 word), single-word list always returns same word
+- [X] T016 [P] [US3] Implement deterministic word selection function in `backend/src/services/gameStore.ts` using `hash(roomCode + ":" + roundNumber) % STARTER_WORDS.length`
+- [X] T017 [US3] Integrate word selection into round creation in `backend/src/services/gameStore.ts` — call word selection on round creation; store selected word in Round.secretWord
+- [X] T018 [US3] Handle edge cases: empty starter list (minimum 1 word), single-word list always returns same word
 
 **Checkpoint**: All user stories should now be independently functional
 

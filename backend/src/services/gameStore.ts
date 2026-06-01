@@ -20,8 +20,14 @@ function hash(input: string): number {
 }
 
 function selectWord(roomCode: string, roundNumber: number): string {
-  const index = hash(`${roomCode}:${roundNumber}`) % STARTER_WORDS.length;
-  return STARTER_WORDS[index];
+  const list = STARTER_WORDS as readonly string[];
+
+  if (list.length === 0) {
+    throw new HttpError(500, "Cannot start game: no words in starter list");
+  }
+
+  const index = hash(`${roomCode}:${roundNumber}`) % list.length;
+  return list[index];
 }
 
 export function createGame(roomCode: string): Game {
