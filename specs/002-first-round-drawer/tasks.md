@@ -67,12 +67,12 @@
 
 ### Implementation for User Story 2
 
-- [ ] T010 [P] [US2] Create `GET /api/games/:code/round` endpoint in `backend/src/api/games.ts` — returns round state; includes `secretWord` only when requesting participantId matches drawerId; includes `endedAt` when status is "round_end"
-- [ ] T011 [P] [US2] Add `fetchRound(code: string, participantId: string)` to `frontend/src/services/api.ts`
-- [ ] T012 [US2] Add game/round state fields and polling methods to `frontend/src/state/roomStore.ts` (round state shape, startRoundPolling/stopRoundPolling, amDrawer flag)
-- [ ] T013 [US2] Implement 60-second countdown timer display in `frontend/src/pages/GamePage.tsx` using `endsAt` from round response
-- [ ] T014 [US2] Implement secret word display in `frontend/src/pages/GamePage.tsx` — show word prominently when `amDrawer` is true; show nothing when false
-- [ ] T015 [US2] Add secret word and timer styles to `frontend/src/styles/app.css` (word card, countdown progress, round-ended reveal)
+- [X] T010 [P] [US2] Create `GET /api/games/:code/round` endpoint in `backend/src/api/games.ts` — returns round state; includes `secretWord` only when requesting participantId matches drawerId; includes `endedAt` when status is "round_end"
+- [X] T011 [P] [US2] Add `fetchRound(code: string, participantId: string)` to `frontend/src/services/api.ts`
+- [X] T012 [US2] Add game/round state fields and polling methods to `frontend/src/state/roomStore.ts` (round state shape, startRoundPolling/stopRoundPolling, amDrawer flag)
+- [X] T013 [US2] Implement 60-second countdown timer display in `frontend/src/pages/GamePage.tsx` using `endsAt` from round response
+- [X] T014 [US2] Implement secret word display in `frontend/src/pages/GamePage.tsx` — show word prominently when `amDrawer` is true; show nothing when false
+- [X] T015 [US2] Add secret word and timer styles to `frontend/src/styles/app.css` (word card, countdown progress, round-ended reveal)
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work — drawer sees word, non-drawers do not, timer counts down
 

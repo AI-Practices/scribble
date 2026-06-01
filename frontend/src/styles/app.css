@@ -527,6 +527,62 @@ input {
   color: var(--ink-soft) !important;
 }
 
+.word-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 48px;
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  text-align: center;
+}
+
+.word-card--reveal {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border-color: #fca5a5;
+}
+
+.word-card__label {
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.word-card__word {
+  color: var(--ink);
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.countdown-timer {
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown-timer--active {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.countdown-timer--ended {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.game-page__header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 /* --- GAME PAGE LAYOUT --- */
 /* Changed layout structure to be much wider and utilize screen space */
 .game-page {

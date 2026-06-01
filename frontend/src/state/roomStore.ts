@@ -17,6 +17,8 @@ export interface RoundState {
   endsAt: string;
   amDrawer: boolean;
   status: "playing" | "round_end";
+  secretWord?: string;
+  endedAt?: string;
 }
 
 export interface RoomState {

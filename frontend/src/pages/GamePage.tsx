@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "../components/Card";
 import { GuessForm } from "../components/GuessForm";
@@ -7,10 +7,18 @@ import { RoomCodeBadge } from "../components/RoomCodeBadge";
 import { Scoreboard } from "../components/Scoreboard";
 import { useRoomState, useRoomStore } from "../state/roomStore";
 
+function formatCountdown(endsAt: string): string {
+  const remaining = Date.parse(endsAt) - Date.now();
+  if (remaining <= 0) return "0s";
+  const seconds = Math.ceil(remaining / 1000);
+  return `${seconds}s`;
+}
+
 export function GamePage() {
   const navigate = useNavigate();
   const { room, participantId, round } = useRoomState();
   const roomStore = useRoomStore();
+  const [now, setNow] = useState(Date.now());
 
   useEffect(() => {
     if (!room) {
@@ -25,6 +33,11 @@ export function GamePage() {
     };
   }, [roomStore]);
 
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   if (!room) {
     return null;
   }
@@ -32,6 +45,9 @@ export function GamePage() {
   const viewer = room.participants.find((participant) => participant.id === participantId) ?? null;
   const amDrawer = round?.amDrawer ?? (participantId === room.drawerId);
   const drawerName = round?.drawerName ?? room.drawerName ?? "Unknown";
+  const isRoundEnd = round?.status === "round_end";
+  const countdown = round?.endsAt ? formatCountdown(round.endsAt) : null;
+  const secretWord = round?.secretWord;
 
   return (
     <section className="panel game-page">
@@ -40,7 +56,14 @@ export function GamePage() {
           <span className="section-kicker">Round {round?.number ?? 1}</span>
           <h1 className="game-page__title">Guess the Word!</h1>
         </div>
-        <RoomCodeBadge code={room.code} />
+        <div className="game-page__header-right">
+          {countdown && (
+            <div className={`countdown-timer ${isRoundEnd ? "countdown-timer--ended" : "countdown-timer--active"}`}>
+              {isRoundEnd ? "Time's up!" : countdown}
+            </div>
+          )}
+          <RoomCodeBadge code={room.code} />
+        </div>
       </div>
 
       <div className="drawer-banner">
@@ -55,6 +78,20 @@ export function GamePage() {
         )}
       </div>
 
+      {amDrawer && secretWord && !isRoundEnd && (
+        <div className="word-card">
+          <span className="word-card__label">Your word</span>
+          <span className="word-card__word">{secretWord}</span>
+        </div>
+      )}
+
+      {isRoundEnd && secretWord && (
+        <div className="word-card word-card--reveal">
+          <span className="word-card__label">The word was</span>
+          <span className="word-card__word">{secretWord}</span>
+        </div>
+      )}
+
       <div className="game-page__layout">
         <aside className="game-page__sidebar game-page__sidebar--left">
           <Scoreboard />
@@ -64,7 +101,7 @@ export function GamePage() {
         <div className="game-page__main">
           <Card title="Canvas">
             <div className="canvas-placeholder" style={{ minHeight: '500px', backgroundColor: '#ffffff', border: '1px solid #e5e7eb' }}>
-              {amDrawer ? "Draw here!" : "Waiting for drawer..."}
+              {amDrawer ? "Draw here!" : isRoundEnd ? "Round ended" : "Waiting for drawer..."}
             </div>
           </Card>
         </div>
@@ -84,7 +121,7 @@ export function GamePage() {
               </div>
               <div>
                 <dt>Status</dt>
-                <dd>Playing</dd>
+                <dd>{isRoundEnd ? "Round Ended" : "Playing"}</dd>
               </div>
             </dl>
           </Card>
