@@ -14,6 +14,7 @@ export interface RoomState {
   participantId: string | null;
   error: string | null;
   isLoading: boolean;
+  connectionIssue: boolean;
 }
 
 type Listener = () => void;
@@ -23,10 +24,13 @@ class RoomStore {
     room: null,
     participantId: null,
     error: null,
-    isLoading: false
+    isLoading: false,
+    connectionIssue: false
   };
 
   private listeners = new Set<Listener>();
+  private _pollIntervalId: ReturnType<typeof setInterval> | null = null;
+  private _consecutivePollFailures = 0;
 
   subscribe = (listener: Listener) => {
     this.listeners.add(listener);
@@ -97,6 +101,37 @@ class RoomStore {
     const response = await api.fetchRoom(this.state.room.code, this.state.participantId ?? undefined);
     this.setRoomSnapshot(response.room);
     return response.room;
+  }
+
+  startPolling(intervalMs: number) {
+    this.stopPolling();
+
+    this._pollIntervalId = setInterval(async () => {
+      try {
+        if (!this.state.room) {
+          return;
+        }
+
+        const snapshot = await api.fetchRoom(this.state.room.code, this.state.participantId ?? undefined);
+        this.setRoomSnapshot(snapshot.room);
+        this._consecutivePollFailures = 0;
+        if (this.state.connectionIssue) {
+          this.setState({ connectionIssue: false });
+        }
+      } catch {
+        this._consecutivePollFailures += 1;
+        if (this._consecutivePollFailures >= 2 && !this.state.connectionIssue) {
+          this.setState({ connectionIssue: true });
+        }
+      }
+    }, intervalMs);
+  }
+
+  stopPolling() {
+    if (this._pollIntervalId !== null) {
+      clearInterval(this._pollIntervalId);
+      this._pollIntervalId = null;
+    }
   }
 }
 

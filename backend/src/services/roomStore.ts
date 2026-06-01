@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import type { Participant, Room, RoomSnapshot } from "../models/game.js";
 import { STARTER_ROLES, STARTER_WORDS } from "../seed/starterData.js";
+import { HttpError } from "../api/schemas.js";
 
 const rooms = new Map<string, Room>();
 
@@ -68,11 +69,19 @@ export function createRoom(playerName?: string) {
   };
 }
 
-export function joinRoom(code: string, playerName?: string) {
+export function joinRoom(code: string, playerName: string) {
+  if (!code.trim()) {
+    throw new HttpError(400, "Room code is required");
+  }
+
   const room = rooms.get(code);
 
   if (!room) {
-    return null;
+    throw new HttpError(404, "Room not found");
+  }
+
+  if (room.participants.some((p) => p.name === playerName)) {
+    throw new HttpError(409, "You are already in this room");
   }
 
   const participant = createParticipant(playerName);

@@ -68,11 +68,11 @@ description: "Task list for Room Setup & Lobby feature"
 
 **Independent Test**: Open a second browser, enter the room code from US1, see both players in the lobby. Try empty code → error shown. Try wrong code → error shown. Try same player again → error shown.
 
-- [ ] T011 [P] [US2] Update `joinRoom` in `backend/src/services/roomStore.ts` to reject empty codes, unknown codes (404), and duplicate participants (409) with distinct messages
-- [ ] T012 [P] [US2] Update `POST /rooms/:code/join` in `backend/src/api/rooms.ts` to return specific error status codes and messages
-- [ ] T013 [P] [US2] Add `playerName` validation (trim, reject empty) to join schema in `backend/src/api/schemas.ts`
-- [ ] T014 [US2] Add client-side room code and player name validation on JoinRoomPage in `frontend/src/pages/JoinRoomPage.tsx`
-- [ ] T015 [US2] Display join error messages from API in the join form UI
+- [X] T011 [P] [US2] Update `joinRoom` in `backend/src/services/roomStore.ts` to reject empty codes, unknown codes (404), and duplicate participants (409) with distinct messages
+- [X] T012 [P] [US2] Update `POST /rooms/:code/join` in `backend/src/api/rooms.ts` to return specific error status codes and messages
+- [X] T013 [P] [US2] Add `playerName` validation (trim, reject empty) to join schema in `backend/src/api/schemas.ts`
+- [X] T014 [US2] Add client-side room code and player name validation on JoinRoomPage in `frontend/src/pages/JoinRoomPage.tsx`
+- [X] T015 [US2] Display join error messages from API in the join form UI
 
 **Checkpoint**: User Story 2 complete — validation covers all error cases, multi-room isolation verified
 
@@ -84,10 +84,10 @@ description: "Task list for Room Setup & Lobby feature"
 
 **Independent Test**: Open two browsers in the same room. Add a player in one browser; the other browser's list updates within 3 seconds without manual refresh. Disconnect network → subtle connection indicator appears.
 
-- [ ] T016 [P] [US3] Add `startPolling(intervalMs: number)` and `stopPolling()` methods to RoomStore in `frontend/src/state/roomStore.ts`
-- [ ] T017 [US3] Add auto-polling `useEffect` in LobbyPage (`frontend/src/pages/LobbyPage.tsx`) that starts on mount and stops on unmount
-- [ ] T018 [P] [US3] Add connection status indicator (subtle banner) when consecutive polls fail in `frontend/src/pages/LobbyPage.tsx`
-- [ ] T019 [US3] Replace manual "Refresh Room" button with a less prominent manual refresh fallback in `frontend/src/pages/LobbyPage.tsx`
+- [X] T016 [P] [US3] Add `startPolling(intervalMs: number)` and `stopPolling()` methods to RoomStore in `frontend/src/state/roomStore.ts`
+- [X] T017 [US3] Add auto-polling `useEffect` in LobbyPage (`frontend/src/pages/LobbyPage.tsx`) that starts on mount and stops on unmount
+- [X] T018 [P] [US3] Add connection status indicator (subtle banner) when consecutive polls fail in `frontend/src/pages/LobbyPage.tsx`
+- [X] T019 [US3] Replace manual "Refresh Room" button with a less prominent manual refresh fallback in `frontend/src/pages/LobbyPage.tsx`
 
 **Checkpoint**: User Story 3 complete — lobby is live with auto-polling and graceful degradation
 
