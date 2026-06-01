@@ -43,6 +43,7 @@ export interface Round {
   secretWord: string;
   startedAt: string;
   endsAt: string;
+  endedAt?: string;
 }
 
 export interface Game {

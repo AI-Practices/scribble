@@ -4,6 +4,7 @@ import { STARTER_WORDS } from "../seed/starterData.js";
 import { HttpError } from "../api/schemas.js";
 
 const games = new Map<string, Game>();
+const roundTimers = new Map<string, ReturnType<typeof setTimeout>>();
 
 function now() {
   return new Date().toISOString();
@@ -68,7 +69,31 @@ export function createGame(roomCode: string): Game {
 
   games.set(roomCode, game);
 
+  roundTimers.set(
+    roomCode,
+    setTimeout(() => {
+      endRound(roomCode);
+    }, 60_000)
+  );
+
   return game;
+}
+
+export function endRound(roomCode: string) {
+  const game = games.get(roomCode);
+
+  if (!game || game.status !== "playing") {
+    return;
+  }
+
+  game.status = "round_end";
+
+  if (game.round) {
+    game.round.endedAt = now();
+  }
+
+  games.set(roomCode, game);
+  roundTimers.delete(roomCode);
 }
 
 export function getGame(roomCode: string): Game | null {

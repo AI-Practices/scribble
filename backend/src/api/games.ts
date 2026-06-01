@@ -39,7 +39,7 @@ export function createGamesRouter() {
       }
 
       if (isRoundEnd) {
-        roundResponse.endedAt = game.round.endsAt;
+        roundResponse.endedAt = game.round.endedAt ?? game.round.endsAt;
       }
 
       response.json({ round: roundResponse });

@@ -98,10 +98,10 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T019 [P] Handle round timer expiry in `backend/src/services/gameStore.ts` — transition game status to "round_end" after 60s; set `endedAt` timestamp
-- [ ] T020 [P] Handle concurrent start requests in `POST /api/rooms/:code/start` — return 400 "Game has already started" if game exists for room
-- [ ] T021 Run `npm run build` in both `backend/` and `frontend/` to verify zero TypeScript errors
-- [ ] T022 Run quickstart.md validation steps end-to-end
+- [X] T019 [P] Handle round timer expiry in `backend/src/services/gameStore.ts` — transition game status to "round_end" after 60s; set `endedAt` timestamp
+- [X] T020 [P] Handle concurrent start requests in `POST /api/rooms/:code/start` — return 400 "Game has already started" if game exists for room
+- [X] T021 Run `npm run build` in both `backend/` and `frontend/` to verify zero TypeScript errors
+- [X] T022 Run quickstart.md validation steps end-to-end
 
 ---
 
