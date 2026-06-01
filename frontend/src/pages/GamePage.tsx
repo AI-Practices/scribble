@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "../components/Card";
+import { DrawingCanvas } from "../components/DrawingCanvas";
 import { GuessForm } from "../components/GuessForm";
-import { ResultPanel } from "../components/ResultPanel";
+import { GuessHistory } from "../components/GuessHistory";
 import { RoomCodeBadge } from "../components/RoomCodeBadge";
 import { Scoreboard } from "../components/Scoreboard";
 import { useRoomState, useRoomStore } from "../state/roomStore";
@@ -94,15 +95,20 @@ export function GamePage() {
 
       <div className="game-page__layout">
         <aside className="game-page__sidebar game-page__sidebar--left">
-          <Scoreboard />
-          <ResultPanel />
+          <Scoreboard scores={round?.scores ?? []} />
+          <Card title="Guesses">
+            <GuessHistory guesses={round?.guesses ?? []} />
+          </Card>
         </aside>
 
         <div className="game-page__main">
           <Card title="Canvas">
-            <div className="canvas-placeholder" style={{ minHeight: '500px', backgroundColor: '#ffffff', border: '1px solid #e5e7eb' }}>
-              {amDrawer ? "Draw here!" : isRoundEnd ? "Round ended" : "Waiting for drawer..."}
-            </div>
+            <DrawingCanvas
+              amDrawer={amDrawer}
+              roomCode={room.code}
+              participantId={participantId ?? ""}
+              canvasState={round?.canvas ?? null}
+            />
           </Card>
         </div>
 
@@ -127,7 +133,15 @@ export function GamePage() {
           </Card>
 
           <Card title="Your Guess">
-            <GuessForm />
+            {amDrawer ? (
+              <p className="guess-feedback guess-feedback--info">You are drawing — no guessing for you!</p>
+            ) : (
+              <GuessForm
+                roomCode={room.code}
+                participantId={participantId ?? ""}
+                guessedCorrectly={round?.guessedCorrectly ?? false}
+              />
+            )}
           </Card>
         </aside>
       </div>

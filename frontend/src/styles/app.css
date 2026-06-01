@@ -698,3 +698,106 @@ input {
     justify-content: stretch;
   }
 }
+
+/* Scoreboard */
+.scoreboard {
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.scoreboard__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: var(--surface-strong);
+}
+
+.scoreboard__name {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.scoreboard__score {
+  color: var(--brand);
+  font-size: 1.125rem;
+}
+
+/* Guess History */
+.guess-history {
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.guess-history__empty {
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.guess-history__item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: var(--surface-strong);
+  font-size: 0.9rem;
+}
+
+.guess-history__item--correct {
+  background: #ecfdf5;
+}
+
+.guess-history__name {
+  color: var(--ink-soft);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.guess-history__content {
+  color: var(--ink);
+  word-break: break-word;
+}
+
+.guess-history__badge {
+  margin-left: auto;
+  color: #059669;
+  font-weight: 700;
+}
+
+/* Guess Feedback */
+.guess-feedback {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.guess-feedback--error {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.guess-feedback--correct {
+  background: #ecfdf5;
+  color: #065f46;
+}
+
+.guess-feedback--incorrect {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.guess-feedback--info {
+  background: #eff6ff;
+  color: #1e40af;
+}

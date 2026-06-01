@@ -137,5 +137,23 @@ export const api = {
     return request<RoundResponse>(
       `/games/${encodeURIComponent(code)}/round?participantId=${encodeURIComponent(participantId)}`
     );
+  },
+  canvasSync(code: string, participantId: string, strokes: Array<{ points: Array<{ x: number; y: number }> }>, cleared: boolean) {
+    return request<{ success: boolean; strokeCount: number }>(
+      `/games/${encodeURIComponent(code)}/canvas/sync`,
+      {
+        method: "POST",
+        body: JSON.stringify({ participantId, strokes, cleared })
+      }
+    );
+  },
+  submitGuess(code: string, participantId: string, content: string) {
+    return request<GuessResult>(
+      `/games/${encodeURIComponent(code)}/guess`,
+      {
+        method: "POST",
+        body: JSON.stringify({ participantId, content })
+      }
+    );
   }
 };

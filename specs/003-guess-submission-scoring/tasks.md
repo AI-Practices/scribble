@@ -55,11 +55,11 @@
 
 ### Implementation for User Story 1
 
-- [ ] T010 [US1] Implement POST /api/games/:code/canvas/sync endpoint in `backend/src/api/guesses.ts` — validates drawer, syncs strokes/clear to canvasStore, returns stroke count
-- [ ] T011 [US1] Extend GET /api/games/:code/round in `backend/src/api/games.ts` — include canvas state (strokes, cleared, updatedAt) in round response
-- [ ] T012 [US1] Create `frontend/src/components/DrawingCanvas.tsx` — HTML5 Canvas freehand drawing with mouse/touch events, draw stroke, clear button, syncs strokes to server via canvas/sync endpoint every ~2s
-- [ ] T013 [P] [US1] Update `frontend/src/pages/GamePage.tsx` — render DrawingCanvas for drawer, pass canvas state to guessers for display
-- [ ] T014 [US1] Add canvas display component in GamePage — guessers see canvas strokes rendered via HTML5 Canvas API on each poll
+- [x] T010 [US1] Implement POST /api/games/:code/canvas/sync endpoint in `backend/src/api/guesses.ts` — validates drawer, syncs strokes/clear to canvasStore, returns stroke count
+- [x] T011 [US1] Extend GET /api/games/:code/round in `backend/src/api/games.ts` — include canvas state (strokes, cleared, updatedAt) in round response
+- [x] T012 [US1] Create `frontend/src/components/DrawingCanvas.tsx` — HTML5 Canvas freehand drawing with mouse/touch events, draw stroke, clear button, syncs strokes to server via canvas/sync endpoint every ~2s
+- [x] T013 [P] [US1] Update `frontend/src/pages/GamePage.tsx` — render DrawingCanvas for drawer, pass canvas state to guessers for display
+- [x] T014 [US1] Add canvas display component in GamePage — guessers see canvas strokes rendered via HTML5 Canvas API on each poll
 
 **Checkpoint**: At this point, US1 should be fully functional — drawer draws/clears, guessers see the drawing update within polling interval.
 
@@ -73,11 +73,11 @@
 
 ### Implementation for User Story 2
 
-- [ ] T015 [P] [US2] Implement POST /api/games/:code/guess endpoint in `backend/src/api/guesses.ts` — calls gameStore.submitGuess(), returns correct/incorrect result, guess details, and scoreAwarded/totalScore
-- [ ] T016 [US2] Mount guess routes in `backend/src/api/router.ts` — add router for guesses endpoints
-- [ ] T017 [P] [US2] Extend `frontend/src/services/api.ts` with submitGuess(code, participantId, content) function — POST to /api/games/:code/guess, returns GuessResult
-- [ ] T018 [US2] Update `frontend/src/components/GuessForm.tsx` — real guess input with submit button, calls submitGuess API, shows validation feedback (empty rejected / accepted + correct/incorrect), disables input after correct guess
-- [ ] T019 [US2] Add guess response types (GuessResult, GuessResponse) to `frontend/src/services/api.ts`
+- [x] T015 [P] [US2] Implement POST /api/games/:code/guess endpoint in `backend/src/api/guesses.ts` — calls gameStore.submitGuess(), returns correct/incorrect result, guess details, and scoreAwarded/totalScore
+- [x] T016 [US2] Mount guess routes in `backend/src/api/router.ts` — add router for guesses endpoints
+- [x] T017 [P] [US2] Extend `frontend/src/services/api.ts` with submitGuess(code, participantId, content) function — POST to /api/games/:code/guess, returns GuessResult
+- [x] T018 [US2] Update `frontend/src/components/GuessForm.tsx` — real guess input with submit button, calls submitGuess API, shows validation feedback (empty rejected / accepted + correct/incorrect), disables input after correct guess
+- [x] T019 [US2] Add guess response types (GuessResult, GuessResponse) to `frontend/src/services/api.ts`
 
 **Checkpoint**: At this point, US2 should be functional — guessers can submit guesses, get immediate validation feedback.
 
@@ -91,10 +91,10 @@
 
 ### Implementation for User Story 3
 
-- [ ] T020 [US3] Extend GET /api/games/:code/round in `backend/src/api/games.ts` — include guesses array and guessedCorrectly boolean in round response
-- [ ] T021 [P] [US3] Update `frontend/src/state/roomStore.ts` — populate guesses, guessedCorrectly from round poll response; add setGuessHistory()
-- [ ] T022 [US3] Create `frontend/src/components/GuessHistory.tsx` — renders ordered guess list with submitter name, content, correct/incorrect indicator
-- [ ] T023 [P] [US3] Update `frontend/src/pages/GamePage.tsx` — render GuessHistory for both drawer and guessers
+- [x] T020 [US3] Extend GET /api/games/:code/round in `backend/src/api/games.ts` — include guesses array and guessedCorrectly boolean in round response
+- [x] T021 [P] [US3] Update `frontend/src/state/roomStore.ts` — populate guesses, guessedCorrectly from round poll response; add setGuessHistory()
+- [x] T022 [US3] Create `frontend/src/components/GuessHistory.tsx` — renders ordered guess list with submitter name, content, correct/incorrect indicator
+- [x] T023 [P] [US3] Update `frontend/src/pages/GamePage.tsx` — render GuessHistory for both drawer and guessers
 
 **Checkpoint**: At this point, US3 should be functional — all players see the guess history updating via polling.
 
@@ -108,10 +108,10 @@
 
 ### Implementation for User Story 4
 
-- [ ] T024 [US4] Extend GET /api/games/:code/round in `backend/src/api/games.ts` — include scores array and guessedCorrectly boolean per participant
-- [ ] T025 [P] [US4] Update `frontend/src/state/roomStore.ts` — populate scores from round poll response
-- [ ] T026 [US4] Update `frontend/src/components/Scoreboard.tsx` — render real scores for all players from roomStore scores
-- [ ] T027 [US4] Update `frontend/src/pages/GamePage.tsx` — pass guessedCorrectly to GuessForm to disable input after correct guess; render Scoreboard for all players
+- [x] T024 [US4] Extend GET /api/games/:code/round in `backend/src/api/games.ts` — include scores array and guessedCorrectly boolean per participant
+- [x] T025 [P] [US4] Update `frontend/src/state/roomStore.ts` — populate scores from round poll response
+- [x] T026 [US4] Update `frontend/src/components/Scoreboard.tsx` — render real scores for all players from roomStore scores
+- [x] T027 [US4] Update `frontend/src/pages/GamePage.tsx` — pass guessedCorrectly to GuessForm to disable input after correct guess; render Scoreboard for all players
 
 **Checkpoint**: At this point, US4 should be functional — correct guesses award 100 points, scoreboard visible to all, correct guessers blocked from further guesses.
 
@@ -121,11 +121,11 @@
 
 **Purpose**: Final integration, edge case handling, and verification
 
-- [ ] T028 Mount canvas sync route in `backend/src/api/router.ts` — add canvas sync endpoint to router
-- [ ] T029 Add edge case handling — reject drawer guesses (FR-014), reject guesses after round timer expired, handle duplicate correct submissions gracefully
-- [ ] T030 [P] Run `npm run build` in both backend/ and frontend/ — verify no TypeScript errors
-- [ ] T031 Run quickstart.md validation — manually verify all 6 verification steps pass
-- [ ] T032 Cleanup: remove placeholder GuessForm and Scoreboard logic in GamePage (replace with real components)
+- [x] T028 Mount canvas sync route in `backend/src/api/router.ts` — add canvas sync endpoint to router
+- [x] T029 Add edge case handling — reject drawer guesses (FR-014), reject guesses after round timer expired, handle duplicate correct submissions gracefully
+- [x] T030 [P] Run `npm run build` in both backend/ and frontend/ — verify no TypeScript errors
+- [x] T031 Run quickstart.md validation — manually verify all 6 verification steps pass
+- [x] T032 Cleanup: remove placeholder GuessForm and Scoreboard logic in GamePage (replace with real components)
 
 ---
 

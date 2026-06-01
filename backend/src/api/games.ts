@@ -2,6 +2,7 @@ import { Router } from "express";
 import { roomCodeParamsSchema, gameQuerySchema, HttpError } from "./schemas.js";
 import { getGame } from "../services/gameStore.js";
 import { getRoom } from "../services/roomStore.js";
+import { getCanvasState } from "../services/canvasStore.js";
 
 export function createGamesRouter() {
   const router = Router();
@@ -24,6 +25,9 @@ export function createGamesRouter() {
       const isRoundEnd = game.status === "round_end";
       const showSecretWord = isDrawer || isRoundEnd;
 
+      const guessedCorrectly = game.correctGuessers.includes(participantId);
+      const canvas = game.canvasState ?? getCanvasState(code.toUpperCase());
+
       const roundResponse: Record<string, unknown> = {
         number: game.round.number,
         status: game.status,
@@ -31,7 +35,11 @@ export function createGamesRouter() {
         drawerName: drawer?.name ?? "Unknown",
         amDrawer: isDrawer,
         startedAt: game.round.startedAt,
-        endsAt: game.round.endsAt
+        endsAt: game.round.endsAt,
+        guesses: game.guesses,
+        scores: game.scores,
+        canvas,
+        guessedCorrectly
       };
 
       if (showSecretWord) {
