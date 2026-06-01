@@ -8,7 +8,7 @@ import { useRoomState, useRoomStore } from "../state/roomStore";
 export function LobbyPage() {
   const navigate = useNavigate();
   const roomStore = useRoomStore();
-  const { room, error, isLoading, connectionIssue } = useRoomState();
+  const { room, participantId, isHost, error, isLoading, connectionIssue } = useRoomState();
 
   useEffect(() => {
     if (!room) {
@@ -79,9 +79,17 @@ export function LobbyPage() {
         <button className="button button--text" onClick={handleRefresh}>
           Refresh
         </button>
-        <button className="button button--primary" onClick={() => navigate("/game")}>
-          Start Game
-        </button>
+        {isHost ? (
+          <button
+            className="button button--primary"
+            disabled={room.participants.length < 2}
+            onClick={() => navigate("/game")}
+          >
+            {room.participants.length < 2 ? "Waiting for players..." : "Start Game"}
+          </button>
+        ) : (
+          <p className="host-message">Waiting for the host to start the game.</p>
+        )}
       </div>
     </section>
   );

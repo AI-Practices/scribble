@@ -12,6 +12,7 @@ import { api, type RoomSessionResponse, type RoomSnapshot } from "../services/ap
 export interface RoomState {
   room: RoomSnapshot | null;
   participantId: string | null;
+  isHost: boolean;
   error: string | null;
   isLoading: boolean;
   connectionIssue: boolean;
@@ -23,6 +24,7 @@ class RoomStore {
   private state: RoomState = {
     room: null,
     participantId: null,
+    isHost: false,
     error: null,
     isLoading: false,
     connectionIssue: false
@@ -70,6 +72,7 @@ class RoomStore {
     this.setState({
       participantId: response.participantId,
       room: response.room,
+      isHost: response.participantId === response.room.hostId,
       error: null
     });
   }
@@ -77,6 +80,7 @@ class RoomStore {
   setRoomSnapshot(room: RoomSnapshot) {
     this.setState({
       room,
+      isHost: !!(this.state.participantId && this.state.participantId === room.hostId),
       error: null
     });
   }

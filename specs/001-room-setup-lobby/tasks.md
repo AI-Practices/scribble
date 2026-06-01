@@ -99,9 +99,9 @@ description: "Task list for Room Setup & Lobby feature"
 
 **Independent Test**: Host sees enabled "Start Game" button when 2+ players present. Non-host sees no start button. Host sees disabled start button with "waiting for players" message when alone.
 
-- [ ] T020 [P] [US4] Derive `isHost` from `participantId === room.hostId` and expose via RoomStore state in `frontend/src/state/roomStore.ts`
-- [ ] T021 [US4] Conditionally render start button only for host in `frontend/src/pages/LobbyPage.tsx` — enabled when ≥2 players, disabled otherwise with explanation
-- [ ] T022 [US4] Add styles for host-only start button and waiting message in `frontend/src/styles/app.css`
+- [X] T020 [P] [US4] Derive `isHost` from `participantId === room.hostId` and expose via RoomStore state in `frontend/src/state/roomStore.ts`
+- [X] T021 [US4] Conditionally render start button only for host in `frontend/src/pages/LobbyPage.tsx` — enabled when ≥2 players, disabled otherwise with explanation
+- [X] T022 [US4] Add styles for host-only start button and waiting message in `frontend/src/styles/app.css`
 
 **Checkpoint**: User Story 4 complete — lobby has full start-game gating
 
