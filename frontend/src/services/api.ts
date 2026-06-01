@@ -79,7 +79,7 @@ export interface RoundResponse {
     scores: PlayerScore[];
     canvas: CanvasState | null;
     guessedCorrectly: boolean;
-  };
+  } | null;
 }
 
 export interface GuessResult {
@@ -154,6 +154,15 @@ export const api = {
       {
         method: "POST",
         body: JSON.stringify({ participantId, content })
+      }
+    );
+  },
+  restartGame(code: string, participantId: string) {
+    return request<{ room: RoomSnapshot }>(
+      `/games/${encodeURIComponent(code)}/restart`,
+      {
+        method: "POST",
+        body: JSON.stringify({ participantId })
       }
     );
   }

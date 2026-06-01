@@ -17,7 +17,7 @@ function formatCountdown(endsAt: string): string {
 
 export function GamePage() {
   const navigate = useNavigate();
-  const { room, participantId, round } = useRoomState();
+  const { room, participantId, round, isHost } = useRoomState();
   const roomStore = useRoomStore();
   const [now, setNow] = useState(Date.now());
 
@@ -33,6 +33,12 @@ export function GamePage() {
       roomStore.stopRoundPolling();
     };
   }, [roomStore]);
+
+  useEffect(() => {
+    if (round === null && room) {
+      navigate("/lobby");
+    }
+  }, [round, room, navigate]);
 
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 1000);
@@ -153,6 +159,17 @@ export function GamePage() {
       </div>
 
       <div className="button-row">
+        {isRoundEnd && isHost && (
+          <button
+            className="button button--primary"
+            onClick={async () => {
+              await roomStore.restartGame();
+              navigate("/lobby");
+            }}
+          >
+            Restart Game
+          </button>
+        )}
         <button className="button button--secondary" onClick={() => navigate("/lobby")}>
           Exit Game
         </button>

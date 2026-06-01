@@ -111,6 +111,29 @@ export function endRound(roomCode: string) {
   roundTimers.delete(roomCode);
 }
 
+export function restartGame(roomCode: string, callerParticipantId: string): void {
+  const game = games.get(roomCode);
+
+  if (!game) {
+    throw new HttpError(404, "No active game for this room");
+  }
+
+  if (game.status !== "round_end") {
+    throw new HttpError(400, "Game is not in result state");
+  }
+
+  const room = getRoom(roomCode);
+  if (!room) {
+    throw new HttpError(404, "Room not found");
+  }
+
+  if (room.hostId !== callerParticipantId) {
+    throw new HttpError(403, "Only the host can restart");
+  }
+
+  resetGameData(roomCode);
+}
+
 function resetGameData(roomCode: string) {
   if (!games.has(roomCode)) {
     return;

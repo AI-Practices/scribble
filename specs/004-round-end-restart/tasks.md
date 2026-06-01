@@ -67,13 +67,13 @@
 
 ### Implementation for User Story 2
 
-- [ ] T009 [US2] Implement `restartGame(code)` in `backend/src/services/gameStore.ts` — validates caller is host and game is in round_end, clears round/guesses/correctGuessers/scores, sets game status to null (no active game), clears Room gameStartedAt/drawerId/drawerName
-- [ ] T010 [US2] Create POST /:code/restart route in `backend/src/api/games.ts` — validates payload with Zod schema, calls restartGame, returns updated room snapshot (lobby state with preserved players)
-- [ ] T011 [US2] Mount restart route in `backend/src/api/router.ts` — ensure POST /api/games/:code/restart is routed correctly
-- [ ] T012 [P] [US2] Add `restartGame(code, participantId)` function to `frontend/src/services/api.ts` — POST to /api/games/:code/restart, returns RoomSnapshot
-- [ ] T013 [US2] Add restart handling to `frontend/src/state/roomStore.ts` — add `restartGame()` method that calls API, clears round state, updates room data to lobby state
-- [ ] T014 [US2] Update `frontend/src/pages/GamePage.tsx` — add "Back to Lobby" / "Restart" button visible only to the host when `round.status === "round_end"`; on restart, navigate to lobby
-- [ ] T015 [US2] Verify `frontend/src/pages/LobbyPage.tsx` renders correctly after restart — players are preserved, gameStartedAt/drawerId/drawerName are absent, the host can start a new game
+- [x] T009 [US2] Implement `restartGame(code)` in `backend/src/services/gameStore.ts` — validates caller is host and game is in round_end, clears round/guesses/correctGuessers/scores, sets game status to null (no active game), clears Room gameStartedAt/drawerId/drawerName
+- [x] T010 [US2] Create POST /:code/restart route in `backend/src/api/games.ts` — validates payload with Zod schema, calls restartGame, returns updated room snapshot (lobby state with preserved players)
+- [x] T011 [US2] Mount restart route in `backend/src/api/router.ts` — ensure POST /api/games/:code/restart is routed correctly
+- [x] T012 [P] [US2] Add `restartGame(code, participantId)` function to `frontend/src/services/api.ts` — POST to /api/games/:code/restart, returns RoomSnapshot
+- [x] T013 [US2] Add restart handling to `frontend/src/state/roomStore.ts` — add `restartGame()` method that calls API, clears round state, updates room data to lobby state
+- [x] T014 [US2] Update `frontend/src/pages/GamePage.tsx` — add "Back to Lobby" / "Restart" button visible only to the host when `round.status === "round_end"`; on restart, navigate to lobby
+- [x] T015 [US2] Verify `frontend/src/pages/LobbyPage.tsx` renders correctly after restart — players are preserved, gameStartedAt/drawerId/drawerName are absent, the host can start a new game
 
 **Checkpoint**: At this point, US2 should be functional — host clicks restart, all players see lobby with preserved player list and no round artifacts.
 
