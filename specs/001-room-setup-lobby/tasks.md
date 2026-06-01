@@ -27,8 +27,8 @@ description: "Task list for Room Setup & Lobby feature"
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Configure TypeScript strict mode in `backend/tsconfig.json` and `frontend/tsconfig.json` (verify `strict: true`, `noImplicitAny: true`)
-- [ ] T002 [P] Verify Vitest configuration for both `backend/` and `frontend/` — confirm `npm test` runs without errors
+- [X] T001 Configure TypeScript strict mode in `backend/tsconfig.json` and `frontend/tsconfig.json` (verify `strict: true`, `noImplicitAny: true`)
+- [X] T002 [P] Verify Vitest configuration for both `backend/` and `frontend/` — confirm `npm test` runs without errors
 
 ---
 
@@ -38,10 +38,10 @@ description: "Task list for Room Setup & Lobby feature"
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T003 Add `hostId` field to `Room` interface in `backend/src/models/game.ts`
-- [ ] T004 [P] Update `createRoom` in `backend/src/services/roomStore.ts` to accept and store the host participant ID
-- [ ] T005 [P] Update `toRoomSnapshot` in `backend/src/services/roomStore.ts` to include `hostId` in the snapshot
-- [ ] T006 [P] Add `hostId` to `RoomSnapshot` TypeScript type in `frontend/src/services/api.ts`
+- [X] T003 Add `hostId` field to `Room` interface in `backend/src/models/game.ts`
+- [X] T004 [P] Update `createRoom` in `backend/src/services/roomStore.ts` to accept and store the host participant ID
+- [X] T005 [P] Update `toRoomSnapshot` in `backend/src/services/roomStore.ts` to include `hostId` in the snapshot
+- [X] T006 [P] Add `hostId` to `RoomSnapshot` TypeScript type in `frontend/src/services/api.ts`
 
 **Checkpoint**: Foundation ready — user story implementation can now begin in parallel
 
