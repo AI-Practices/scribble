@@ -8,6 +8,16 @@
 
 **Input**: User description: "Given a round has ended, When the result state is displayed and the host restarts, Then all players see the correct word, final scores, and full guess history; on restart, everyone returns to the lobby with players preserved and all round state cleared."
 
+## Clarifications
+
+### Session 2026-06-01
+
+- Q: What happens if the host disconnects during the result state? → A: Room auto-returns to lobby after a 15-30 second timeout
+- Q: How long should the result state persist before timeout? → A: 60 seconds
+- Q: What is the reconnection window for players to see the result state? → A: 60 seconds (same as result state timeout)
+- Q: What non-player data persists on restart? → A: Room settings (name, round count, timer config) persist; scores and chat reset
+- Q: What is the maximum number of players per room? → A: 8 players
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - View Round Results (Priority: P1)
@@ -58,7 +68,7 @@ As a non-host player, if I navigate away and return during the result state I wa
 
 ### Edge Cases
 
-- What happens if the host disconnects during the result state? (Another player should be able to become host and trigger restart, or the room should auto-return to lobby after a timeout)
+- If the host disconnects during the result state, the room auto-returns to lobby after a 15-30 second timeout
 - What happens if a player joins after the restart to lobby? They should appear in the lobby alongside preserved players
 - What happens if all players except the host leave during result state? The host should still be able to restart and return to lobby alone
 - What happens if the host restarts while a player is still loading the result state? The player should transition to lobby upon receiving the restart signal
@@ -73,9 +83,10 @@ As a non-host player, if I navigate away and return during the result state I wa
 - **FR-004**: Only the host MAY trigger a restart from the result state
 - **FR-005**: When the host restarts, the system MUST transition all players to the lobby simultaneously
 - **FR-006**: After restart, the system MUST preserve all players who were in the room
-- **FR-007**: After restart, the system MUST clear all round-specific data including the current word, guess history, in-progress scores, drawer assignment, and round timer
-- **FR-008**: The result state MUST persist on the server until the host triggers restart or a timeout occurs
+- **FR-007**: After restart, the system MUST clear all round-specific data including the current word, guess history, in-progress scores, cumulative scores, drawer assignment, round timer, and chat history; room settings (name, round count, timer config) MUST be preserved
+- **FR-008**: The result state MUST persist on the server until the host triggers restart or a 60-second timeout elapses
 - **FR-009**: Players who reconnect during the result state MUST see the same result data as all other players
+- **FR-010**: The room MUST support up to 8 concurrent players in the result state
 
 ### Key Entities *(include if feature involves data)*
 
@@ -97,7 +108,8 @@ As a non-host player, if I navigate away and return during the result state I wa
 ## Assumptions
 
 - A single designated host exists per room (consistent with the existing room model)
-- Players who disconnect during the result state and reconnect within a reasonable time window will see the result state
+- Players who disconnect during the result state and reconnect within 60 seconds will see the result state
 - There is a mechanism for host transition if the current host disconnects
 - Round scoring logic already exists and produces per-player scores
 - Guess history is recorded during the round and is available at round end
+- Maximum of 8 players per room
