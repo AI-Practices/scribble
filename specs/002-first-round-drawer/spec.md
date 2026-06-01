@@ -8,6 +8,15 @@
 
 **Input**: User description: "Given a game is starting and player names are trimmed (empty/whitespace-only rejected with a message), When the first round begins, Then the host (or first player) becomes the clearly-identified drawer, and the secret word (deterministically selected from the starter list) is visible only to the drawer."
 
+## Clarifications
+
+### Session 2026-06-01
+
+- Q: What game state model and transitions exist? → A: 3 states: Lobby → Playing (Round Active) → Round End. Lobby-to-Playing transition creates the round and assigns the drawer atomically.
+- Q: How does the first round end? → A: Timed — fixed 60-second countdown. The Playing → Round End transition fires when the timer expires.
+- Q: How does the frontend learn the round started and receive round state? → A: A dedicated `/games/:code/round` endpoint polled at ~2s. Drawer identity included for all players; secret word included only for the drawer.
+- Q: What happens after the first round ends? → A: Round End → results display (word revealed), then auto-transitions to the next round with the next player as drawer. The Round End → next round transition is out of scope for this feature.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Drawer Assigned When Round Begins (Priority: P1)
@@ -62,6 +71,7 @@ When the first round begins, the same game state always yields the same secret w
 - What happens when the starter list is empty or contains only one word — the system still selects deterministically; a single word is always chosen
 - What happens when the game has exactly 2 players (host and one other) — the host is still the drawer; the single non-drawer player guesses
 - What happens when a non-drawer player tries to poll or inspect the secret word through any endpoint — the word is never exposed
+- What happens when the round timer expires — the Playing → Round End transition fires; drawer assignment and word selection are final and do not repeat
 
 ## Requirements *(mandatory)*
 
@@ -77,7 +87,7 @@ When the first round begins, the same game state always yields the same secret w
 
 ### Key Entities *(include if feature involves data)*
 
-- **Round**: A single drawing round within a game. Has a round number, a designated drawer, and a secret word. Belongs to one game.
+- **Round**: A single drawing round within a game. Has a round number, a designated drawer, and a secret word. Created atomically on the Lobby-to-Playing transition. Belongs to one game.
 - **Drawer**: The player assigned to draw in a given round. Determined by game rules (host for first round).
 - **Secret Word**: The word selected from the starter list for a round. Visible only to the drawer.
 - **Starter List**: A predefined collection of words available for selection. Populated by the system.
@@ -91,6 +101,7 @@ When the first round begins, the same game state always yields the same secret w
 - **SC-003**: All players can identify who the drawer is within 2 seconds of the round starting
 - **SC-004**: The same game session always selects the same word for round 1 when replayed
 - **SC-005**: The selected word is always from the starter list
+- **SC-006**: The first round lasts exactly 60 seconds from the Playing state entry, after which the Round End transition triggers
 
 ## Assumptions
 
@@ -98,5 +109,6 @@ When the first round begins, the same game state always yields the same secret w
 - The drawer's role rotates in subsequent rounds, but round rotation rules are out of scope for this feature
 - The starter list is provided as part of the application (not user-configurable for v1)
 - Deterministic selection is based on a combination of room/round identifiers, not random
-- The game state transitions from lobby to round play when the host starts the game
+- The game uses a 3-state model: Lobby → Playing (Round Active) → Round End. The host starting the game triggers the Lobby-to-Playing transition
+- Round state is delivered via a dedicated `/games/:code/round` endpoint polled at ~2s, separate from the lobby polling. The drawer identity is returned to all players; the secret word is returned only to the drawer
 - Host transfer rules (if host disconnects) are inherited from the Room Setup & Lobby feature
