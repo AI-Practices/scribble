@@ -48,6 +48,7 @@ export function GamePage() {
   const drawerName = round?.drawerName ?? room.drawerName ?? "Unknown";
   const isRoundEnd = round?.status === "round_end";
   const countdown = round?.endsAt ? formatCountdown(round.endsAt) : null;
+  const resultExpiresIn = round?.resultExpiresAt ? formatCountdown(round.resultExpiresAt) : null;
   const secretWord = round?.secretWord;
 
   return (
@@ -60,7 +61,12 @@ export function GamePage() {
         <div className="game-page__header-right">
           {countdown && (
             <div className={`countdown-timer ${isRoundEnd ? "countdown-timer--ended" : "countdown-timer--active"}`}>
-              {isRoundEnd ? "Time's up!" : countdown}
+              {isRoundEnd ? (
+                <>
+                  Time's up!
+                  {resultExpiresIn && <span className="countdown-timer__expiry"> &middot; Results expire in {resultExpiresIn}</span>}
+                </>
+              ) : countdown}
             </div>
           )}
           <RoomCodeBadge code={room.code} />

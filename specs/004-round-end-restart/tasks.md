@@ -52,8 +52,8 @@
 
 ### Implementation for User Story 1
 
-- [ ] T007 [P] [US1] Extend GET /games/:code/round in `backend/src/api/games.ts` to include `resultExpiresAt` in the round response when status is round_end
-- [ ] T008 [US1] Update `frontend/src/pages/GamePage.tsx` to display a result expiry countdown (e.g., "Results expire in 45s") when `round.status === "round_end"` using `round.resultExpiresAt`
+- [x] T007 [P] [US1] Extend GET /games/:code/round in `backend/src/api/games.ts` to include `resultExpiresAt` in the round response when status is round_end
+- [x] T008 [US1] Update `frontend/src/pages/GamePage.tsx` to display a result expiry countdown (e.g., "Results expire in 45s") when `round.status === "round_end"` using `round.resultExpiresAt`
 
 **Checkpoint**: At this point, US1 should be fully functional — all players see the correct word, scores, guess history, and a result expiry countdown.
 
