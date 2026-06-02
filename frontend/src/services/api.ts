@@ -89,7 +89,7 @@ export interface GuessResult {
   totalScore?: number;
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3001";
+const API_BASE_URL = import.meta.env.VITE_API_URL ?? "/api";
 
 async function request<T>(path: string, init?: RequestInit) {
   const response = await fetch(`${API_BASE_URL}${path}`, {
