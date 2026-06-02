@@ -8,11 +8,10 @@ export function createApp() {
   app.use(cors());
   app.use(express.json());
 
-  app.get("/health", (_request, response) => {
+  app.use("/api", createApiRouter());
+  app.get("/api/health", (_request, response) => {
     response.json({ ok: true });
   });
-
-  app.use(createApiRouter());
   app.use(notFoundHandler);
   app.use(errorHandler);
 

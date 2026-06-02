@@ -4,8 +4,4 @@ import { createApp } from "../../backend/src/app.js";
 
 const app = createApp();
 
-export const handler: Handler = serverless(app, {
-  request: (request, event) => {
-    request.url = event.path.replace("/.netlify/functions/api", "") || "/";
-  },
-});
+export const handler: Handler = serverless(app);
