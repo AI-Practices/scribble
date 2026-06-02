@@ -40,3 +40,15 @@ You are working on a monolithic repository for a multiplayer drawing game ("Scri
 -   Give concise, direct answers.
 -   Do not output large blocks of code if a small change suffices.
 -   When creating or editing files, ensure consistency with the existing directory structure detailed above.
+
+<!-- SPECKIT START -->
+For additional context about the current feature, read the implementation plan:
+specs/004-round-end-restart/plan.md
+
+Key design documents:
+- spec.md — feature specification and acceptance criteria
+- research.md — gap analysis between current and required state
+- data-model.md — entity definitions, validation rules, state transitions
+- contracts/room-api.md — API endpoint contracts
+- quickstart.md — verification steps
+<!-- SPECKIT END -->

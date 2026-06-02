@@ -7,13 +7,42 @@ import {
   useSyncExternalStore,
   type PropsWithChildren
 } from "react";
-import { api, type RoomSessionResponse, type RoomSnapshot } from "../services/api";
+import {
+  api,
+  type RoomSessionResponse,
+  type RoomSnapshot,
+  type GameStartResponse,
+  type Guess,
+  type PlayerScore,
+  type CanvasState
+} from "../services/api";
+
+export interface RoundState {
+  number: number;
+  drawerId: string;
+  drawerName: string;
+  startedAt: string;
+  endsAt: string;
+  amDrawer: boolean;
+  status: "playing" | "round_end";
+  secretWord?: string;
+  endedAt?: string;
+  resultExpiresAt?: string;
+  guesses: Guess[];
+  scores: PlayerScore[];
+  canvas: CanvasState | null;
+  guessedCorrectly: boolean;
+}
 
 export interface RoomState {
   room: RoomSnapshot | null;
   participantId: string | null;
+  isHost: boolean;
   error: string | null;
   isLoading: boolean;
+  connectionIssue: boolean;
+  round: RoundState | null;
+  gameStatus: string | null;
 }
 
 type Listener = () => void;
@@ -22,11 +51,18 @@ class RoomStore {
   private state: RoomState = {
     room: null,
     participantId: null,
+    isHost: false,
     error: null,
-    isLoading: false
+    isLoading: false,
+    connectionIssue: false,
+    round: null,
+    gameStatus: null
   };
 
   private listeners = new Set<Listener>();
+  private _pollIntervalId: ReturnType<typeof setInterval> | null = null;
+  private _roundPollIntervalId: ReturnType<typeof setInterval> | null = null;
+  private _consecutivePollFailures = 0;
 
   subscribe = (listener: Listener) => {
     this.listeners.add(listener);
@@ -66,6 +102,7 @@ class RoomStore {
     this.setState({
       participantId: response.participantId,
       room: response.room,
+      isHost: response.participantId === response.room.hostId,
       error: null
     });
   }
@@ -73,6 +110,7 @@ class RoomStore {
   setRoomSnapshot(room: RoomSnapshot) {
     this.setState({
       room,
+      isHost: !!(this.state.participantId && this.state.participantId === room.hostId),
       error: null
     });
   }
@@ -89,6 +127,63 @@ class RoomStore {
     return response;
   }
 
+  setGameStartResponse(response: GameStartResponse) {
+    const drawerId = response.game.drawerId;
+    this.setState({
+      gameStatus: response.game.status,
+      round: {
+        number: response.game.roundNumber,
+        drawerId,
+        drawerName: response.game.drawerName,
+        startedAt: response.game.startedAt,
+        endsAt: response.game.endsAt,
+        amDrawer: drawerId === this.state.participantId,
+        status: "playing",
+        guesses: [],
+        scores: [],
+        canvas: null,
+        guessedCorrectly: false
+      }
+    });
+  }
+
+  setRoundState(round: RoundState) {
+    this.setState({ round });
+  }
+
+  async restartGame() {
+    if (!this.state.room || !this.state.participantId) {
+      return;
+    }
+
+    const response = await api.restartGame(this.state.room.code, this.state.participantId);
+    this.setState({
+      room: response.room,
+      round: null,
+      gameStatus: null
+    });
+  }
+
+  async fetchRound() {
+    if (!this.state.room || !this.state.participantId) {
+      return;
+    }
+
+    try {
+      const response = await api.fetchRound(
+        this.state.room.code,
+        this.state.participantId
+      );
+      if (response.round) {
+        this.setRoundState(response.round);
+      } else {
+        this.setState({ round: null, gameStatus: null });
+      }
+    } catch {
+      // round polling failure handled gracefully
+    }
+  }
+
   async fetchRoom() {
     if (!this.state.room) {
       return null;
@@ -97,6 +192,52 @@ class RoomStore {
     const response = await api.fetchRoom(this.state.room.code, this.state.participantId ?? undefined);
     this.setRoomSnapshot(response.room);
     return response.room;
+  }
+
+  startPolling(intervalMs: number) {
+    this.stopPolling();
+
+    this._pollIntervalId = setInterval(async () => {
+      try {
+        if (!this.state.room) {
+          return;
+        }
+
+        const snapshot = await api.fetchRoom(this.state.room.code, this.state.participantId ?? undefined);
+        this.setRoomSnapshot(snapshot.room);
+        this._consecutivePollFailures = 0;
+        if (this.state.connectionIssue) {
+          this.setState({ connectionIssue: false });
+        }
+      } catch {
+        this._consecutivePollFailures += 1;
+        if (this._consecutivePollFailures >= 2 && !this.state.connectionIssue) {
+          this.setState({ connectionIssue: true });
+        }
+      }
+    }, intervalMs);
+  }
+
+  stopPolling() {
+    if (this._pollIntervalId !== null) {
+      clearInterval(this._pollIntervalId);
+      this._pollIntervalId = null;
+    }
+  }
+
+  startRoundPolling(intervalMs: number) {
+    this.stopRoundPolling();
+
+    this._roundPollIntervalId = setInterval(() => {
+      this.fetchRound();
+    }, intervalMs);
+  }
+
+  stopRoundPolling() {
+    if (this._roundPollIntervalId !== null) {
+      clearInterval(this._roundPollIntervalId);
+      this._roundPollIntervalId = null;
+    }
   }
 }
 

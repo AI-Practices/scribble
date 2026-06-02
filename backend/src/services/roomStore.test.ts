@@ -11,9 +11,20 @@ describe("roomStore", () => {
     expect(result.participantId).toBeDefined();
   });
 
-  it("joinRoom returns null for an unknown room code", () => {
-    const result = joinRoom("ZZZZ", "Bob");
+  it("joinRoom throws 404 for an unknown room code", () => {
+    expect(() => joinRoom("ZZZZ", "Bob")).toThrow("Room not found");
+  });
 
-    expect(result).toBeNull();
+  it("joinRoom throws 409 for a duplicate participant name", () => {
+    const { room } = createRoom("Alice");
+    expect(() => joinRoom(room.code, "Alice")).toThrow("You are already in this room");
+  });
+
+  it("joinRoom succeeds for a new participant", () => {
+    const { room } = createRoom("Alice");
+    const result = joinRoom(room.code, "Bob");
+
+    expect(result.participantId).toBeDefined();
+    expect(result.room.participants).toHaveLength(2);
   });
 });
